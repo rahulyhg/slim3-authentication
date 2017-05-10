@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="container">
+                <div id="header"></div>
+                <!-- /#header -->
+                <div id="content">{% block content %}{% endblock %}</div>
+                <!-- /#content -->
+                <div id="footer"></div>
+                <!-- /#footer -->
+            </div>
+            <!-- /#container -->
+        </div>
+        <!-- /#wrapper -->
+        <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    </body>
+</html>
