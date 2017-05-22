@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
-use App\Core\Model as BaseModel;
+use App\Core\Model;
 
-class Example extends BaseModel {
+class Example extends Model {
     
 }
