@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Core\Controller as BaseController;
+use App\Core\Controller;
 
-class Example extends BaseController {
+class Example extends Controller {
 
     public function index($request, $response) {
         

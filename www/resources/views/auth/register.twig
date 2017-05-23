@@ -8,7 +8,7 @@
                         <h3 class="panel-title">Create a New Account</h3>
                     </div>
                     <div class="panel-body">
-                        <form action="{{ path_for("register") }}" method="post" name="register">
+                        <form action="{{ path_for("auth.register") }}" method="post" name="register">
                             <div class="form-group{{ errors.forename ? ' has-error' : '' }}">
                                 <label for="forename-input" class="control-label">Forename <span class="text-danger">*</span></label>
                                 <input type="text" id="forename-input" class="form-control" name="forename" value="{{ input.forename }}" />
@@ -52,7 +52,7 @@
                                 {% endif %}
                             </div>
                             <button type="submit" class="btn btn-primary">Register</button>
-                            <a href="{{ path_for("login") }}" class="btn btn-link">Cancel</a>
+                            <a href="{{ path_for("auth.login") }}" class="btn btn-link">Cancel</a>
                         </form>
                     </div>
                 </div>
