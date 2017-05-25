@@ -1,14 +1,4 @@
---
--- Table structure for table 'posts'
---
-CREATE TABLE IF NOT EXISTS `posts` (
-    `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `content` LONGTEXT DEFAULT NULL,
-    `title` TEXT NOT NULL,
-    `updated_at` DATETIME  DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
 
 --
 -- Table structure for table 'users'

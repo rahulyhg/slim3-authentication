@@ -4,7 +4,7 @@ namespace App\Middleware;
 
 use App\Core\Middleware;
 
-class RestirctAuthenticated extends Middleware {
+class RestirctAuth extends Middleware {
 
     public function handle($request, $response, $next) {
         if ($this->container->auth->check()) {

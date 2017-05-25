@@ -40,7 +40,7 @@ class Auth extends Controller {
     public function postLogin($request, $response) {
 
         $validation = $this->validator->validate($request, [
-            "email" => Validator::notEmpty()->email(),
+            "email_or_username" => Validator::notEmpty(),
             "password" => Validator::notEmpty()
         ]);
 
@@ -48,7 +48,7 @@ class Auth extends Controller {
             return($response->withRedirect($this->router->pathFor("auth.login")));
         }
 
-        $email = $request->getParam("email");
+        $email = $request->getParam("email_or_username");
         $password = $request->getParam("password");
         $remember = false;
         if (!$this->container->auth->login($email, $password, $remember)) {
@@ -63,12 +63,12 @@ class Auth extends Controller {
     public function postRegister($request, $response) {
 
         $validation = $this->validator->validate($request, [
-            "forename" => Validator::notEmpty()->noWhitespace()->alpha(),
-            "surname" => Validator::notEmpty()->noWhitespace()->alpha(),
-            "username" => Validator::notEmpty()->noWhitespace()->alpha(),
-            "email" => Validator::notEmpty()->noWhitespace()->email()->emailUnique(),
-            "password" => Validator::notEmpty()->noWhitespace()->identical("password_repeat"),
-            "password_repeat" => Validator::notEmpty()->noWhitespace()->identical("password"),
+            "forename" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
+            "surname" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
+            "username" => Validator::max(32)->notEmpty()->noWhitespace()->alpha(),
+            "email" => Validator::max(254)->notEmpty()->noWhitespace()->email()->emailUnique(),
+            "password" => Validator::max(8)->notEmpty()->noWhitespace()->identical("password_repeat"),
+            "password_repeat" => Validator::max(8)->notEmpty()->noWhitespace()->identical("password"),
         ]);
 
         if (!$validation->passed()) {

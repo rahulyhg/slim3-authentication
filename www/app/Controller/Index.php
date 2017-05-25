@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Core\Controller as BaseController;
+use App\Core\Controller;
 
-class Index extends BaseController {
-    
+class Index extends Controller {
+
     public function index($request, $response) {
         return $this->container->view->render($response, "index/index.twig");
     }
-    
+
 }

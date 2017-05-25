@@ -4,6 +4,6 @@ namespace App\Model;
 
 use App\Core\Model;
 
-class Example extends Model {
+class Index extends Model {
     
 }

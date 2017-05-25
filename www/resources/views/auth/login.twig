@@ -9,11 +9,11 @@
                     </div>
                     <div class="panel-body">
                         <form action="{{ path_for("auth.login") }}" method="post" name="login">
-                            <div class="form-group{{ errors.email ? ' has-error' : '' }}">
-                                <label for="email-input" class="control-label">Email <span class="text-danger">*</span></label>
-                                <input type="text" id="email-input" class="form-control" name="email" value="{{ input.email }}" />
-                                {% if errors.email %}
-                                    <span class="help-block">{{ errors.email | first }}</span>
+                            <div class="form-group{{ errors.email_or_username ? ' has-error' : '' }}">
+                                <label for="email-or-username-input" class="control-label">Email or Username <span class="text-danger">*</span></label>
+                                <input type="text" id="email-or-username-input" class="form-control" name="email_or_username" value="{{ input.email_or_username }}" />
+                                {% if errors.email_or_username %}
+                                    <span class="help-block">{{ errors.email_or_username | first }}</span>
                                 {% endif %}
                             </div>
                             <div class="form-group{{ errors.password ? ' has-error' : '' }}">
