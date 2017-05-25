@@ -1,12 +1,11 @@
 {% extends "template.twig" %}
+{% block title %}{{ user.forename }} {{ user.surname }}{% endblock %}
 {% block content %}
-    <div class="container">
-        <div class="jumbotron">
-            <h1>{{ user.forename }} {{ user.surname }}</h1>
-            <h3>
-                <a href="{{ path_for('profile', {username: user.username}) }}">@{{ user.username }}</a>
-            </h3>
-            <p>...</p>
-        </div>
+    <div class="jumbotron">
+        <h1>{{ user.forename }} {{ user.surname }}</h1>
+        <h3>
+            <a href="{{ path_for('profile', {username: user.username}) }}">@{{ user.username }}</a>
+        </h3>
+        <p>...</p>
     </div>
 {% endblock %}

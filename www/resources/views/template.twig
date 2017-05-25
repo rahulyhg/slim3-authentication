@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>{% block title %}{% endblock %}</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="{{ base_url() }}/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
@@ -33,11 +33,26 @@
                 </div>
             </nav>
             <div id="container">
-                <div id="header"></div>
+                <div id="feedback" class="container">
+                    {% if flash.getMessage('danger') %}
+                    <div class="alert alert-danger">{{ flash.getMessage('danger') | first }}</div>
+                    {% endif %}
+                    {% if flash.getMessage('info') %}
+                    <div class="alert alert-info">{{ flash.getMessage('info') | first }}</div>
+                    {% endif %}
+                    {% if flash.getMessage('success') %}
+                    <div class="alert alert-success">{{ flash.getMessage('success') | first }}</div>
+                    {% endif %}
+                    {% if flash.getMessage('warning') %}
+                    <div class="alert alert-success">{{ flash.getMessage('warning') | first }}</div>
+                    {% endif %}
+                </div>
+                <!-- /#feedback -->
+                <div id="header" class="container"></div>
                 <!-- /#header -->
-                <div id="content">{% block content %}{% endblock %}</div>
+                <div id="content" class="container">{% block content %}{% endblock %}</div>
                 <!-- /#content -->
-                <div id="footer"></div>
+                <div id="footer" class="container"></div>
                 <!-- /#footer -->
             </div>
             <!-- /#container -->

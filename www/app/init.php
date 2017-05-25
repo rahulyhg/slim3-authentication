@@ -29,6 +29,10 @@ $container["auth"] = function($container) {
     return new \App\Auth\Auth();
 };
 
+$container["csrf"] = function($container) {
+    return new Slim\Csrf\Guard;
+};
+
 $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($container["settings"]["db"]);
 $capsule->setAsGlobal();
@@ -36,6 +40,10 @@ $capsule->bootEloquent();
     
 $container["db"] = function ($container) use ($capsule) {
     return $capsule;
+};
+
+$container["flash"] = function ($container) {
+    return new Slim\Flash\Messages;
 };
 
 $container['validator'] = function ($container) {
@@ -57,11 +65,16 @@ $container["view"] = function ($container) {
         "user" => $container->auth->user(),
     ]);
     
+    $view->getEnvironment()->addGlobal("flash", $container->flash);
+    
     return $view;
 };
 
 $App->add(new App\Middleware\OldInput($container));
 $App->add(new App\Middleware\ValidationErrors($container));
+$App->add(new App\Middleware\CsrfView($container));
+
+$App->add($container->csrf);
 
 Validator::with('App\\Validation\\Rules\\');
 
