@@ -29,9 +29,9 @@ $container["auth"] = function($container) {
     return new \App\Auth\Auth();
 };
 
-$container["csrf"] = function($container) {
-    return new Slim\Csrf\Guard;
-};
+//$container["csrf"] = function($container) {
+//    return new Slim\Csrf\Guard;
+//};
 
 $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($container["settings"]["db"]);
@@ -72,9 +72,9 @@ $container["view"] = function ($container) {
 
 $App->add(new App\Middleware\OldInput($container));
 $App->add(new App\Middleware\ValidationErrors($container));
-$App->add(new App\Middleware\CsrfView($container));
+//$App->add(new App\Middleware\CsrfView($container));
 
-$App->add($container->csrf);
+//$App->add($container->csrf);
 
 Validator::with('App\\Validation\\Rules\\');
 

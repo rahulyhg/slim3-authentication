@@ -48,7 +48,7 @@
                             <label for="password-repeat-input" class="control-label">Password Repeat <span class="text-danger">*</span></label>
                             <input type="password" id="password-repeat-input" class="form-control" name="password_repeat" />
                             {% if errors.password_repeat %}
-                                <span class="help-block">herrors.password_repeat | first }}</span>
+                                <span class="help-block">{{ errors.password_repeat | first }}</span>
                             {% endif %}
                         </div>
                         <button type="submit" class="btn btn-primary">Register</button>

@@ -10,9 +10,9 @@ use App\Middleware\RestirctGuests;
 $App->group("", function () {
     
     // Get requests
-    $this->get("/", Index::class . ":index")->setName("index");
+    $this->get("/", Index::class . ":getIndex")->setName("index");
     $this->get("/logout", Auth::class . ":getLogout")->setName("auth.logout");
-    $this->get("/profile/{username}", Profile::class . ":index")->setName("profile");
+    $this->get("/profile/{username}", Profile::class . ":getProfile")->setName("profile");
 })->add(new RestirctGuests($container));
 
 // Unauthenticated only routes

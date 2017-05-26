@@ -51,6 +51,9 @@ class Auth extends Controller {
         $email = $request->getParam("email_or_username");
         $password = $request->getParam("password");
         $remember = false;
+        
+        die($request->getParam("remember") === "on" ? "yes" : "no");
+        
         if (!$this->container->auth->login($email, $password, $remember)) {
             $this->flash->addMessage("danger", "The login credentials combination you have entered is incorrect");
             return($response->withRedirect($this->router->pathFor("auth.login")));
@@ -66,7 +69,7 @@ class Auth extends Controller {
         $validation = $this->validator->validate($request, [
             "forename" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
             "surname" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
-            "username" => Validator::max(32)->notEmpty()->noWhitespace()->alpha(),
+            "username" => Validator::max(32)->notEmpty()->noWhitespace()->alnum(),
             "email" => Validator::max(254)->notEmpty()->noWhitespace()->email()->emailUnique(),
             "password" => Validator::max(8)->notEmpty()->noWhitespace(),
             "password_repeat" => Validator::max(8)->notEmpty()->noWhitespace()->identical("password"),
@@ -84,10 +87,12 @@ class Auth extends Controller {
             "surname" => $request->getParam("surname"),
             "username" => $request->getParam("username")
         ]);
+        
         if (!$user) {
             $this->flash->addMessage("danger", "There was a problem creating your account!");
             return($response->withRedirect($this->router->pathFor("auth.register")));
         }
+        
         $this->flash->addMessage("success", "Your account has been successfully created!");
         return($response->withRedirect($this->router->pathFor("auth.login")));
     }
