@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\Controller;
 use App\Model\User;
+use App\Model\UserCookie;
 use App\Utility\Hash;
 use Respect\Validation\Validator;
 
@@ -38,6 +39,9 @@ class Auth extends Controller {
      * 
      */
     public function postLogin($request, $response) {
+        
+        die($hash = UserCookie::where("user_id", 1)->first()->hash);
+        
 
         $validation = $this->validator->validate($request, [
             "email_or_username" => Validator::notEmpty(),
@@ -50,17 +54,25 @@ class Auth extends Controller {
 
         $email = $request->getParam("email_or_username");
         $password = $request->getParam("password");
-        $remember = false;
-        
-        die($request->getParam("remember") === "on" ? "yes" : "no");
-        
-        if (!$this->container->auth->login($email, $password, $remember)) {
+
+        if (!$this->container->auth->login($email, $password)) {
             $this->flash->addMessage("danger", "The login credentials combination you have entered is incorrect");
             return($response->withRedirect($this->router->pathFor("auth.login")));
         }
-        return($response->withRedirect($this->router->pathFor("index")));
-    }
 
+//        if ($request->getParam("remember") === "on") {
+//            $hash = UserCookie::where("user_id", 1)->first()->hash;
+//            if(!$hash) {
+//                $hash = Hash::generateUnique();
+//                $cookie = \UserCookie::create([
+//                    "hash" => $hash,
+//                    "user_id" => 1
+//                ]);
+//            } 
+//        }
+        return($response->withRedirect($this->router->pathFor("index")));
+    }    
+    
     /**
      * 
      */
@@ -80,19 +92,19 @@ class Auth extends Controller {
         }
 
         $user = User::create([
-            "salt" => ($salt = Hash::generateSalt(32)),
-            "email" => $request->getParam("email"),
-            "forename" => $request->getParam("forename"),
-            "password" => Hash::generate($request->getParam("password"), $salt),
-            "surname" => $request->getParam("surname"),
-            "username" => $request->getParam("username")
+                    "salt" => ($salt = Hash::generateSalt(32)),
+                    "email" => $request->getParam("email"),
+                    "forename" => $request->getParam("forename"),
+                    "password" => Hash::generate($request->getParam("password"), $salt),
+                    "surname" => $request->getParam("surname"),
+                    "username" => $request->getParam("username")
         ]);
-        
+
         if (!$user) {
             $this->flash->addMessage("danger", "There was a problem creating your account!");
             return($response->withRedirect($this->router->pathFor("auth.register")));
         }
-        
+
         $this->flash->addMessage("success", "Your account has been successfully created!");
         return($response->withRedirect($this->router->pathFor("auth.login")));
     }

@@ -46,8 +46,8 @@ $container["flash"] = function ($container) {
     return new Slim\Flash\Messages;
 };
 
-$container['validator'] = function ($container) {
-    return new App\Validation\Validator;
+$container["validator"] = function ($container) {
+    return new App\Utility\Validator;
 };
 
 $container["view"] = function ($container) {
@@ -72,6 +72,6 @@ $App->add(new App\Middleware\OldInput($container));
 $App->add(new App\Middleware\ValidationErrors($container));
 $App->add($container->csrf);
 
-Validator::with('App\\Validation\\Rules\\');
+Validator::with("App\\Utility\\Validator\\Rules");
 
 require_once "../routes/web.php";

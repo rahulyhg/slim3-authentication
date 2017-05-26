@@ -12,7 +12,7 @@ class Auth {
         return(Session::exists("user_id"));
     }
 
-    public function login($emailOrUsername, $password, $remember = false) {
+    public function login($emailOrUsername, $password) {
         $user = User::where("email", $emailOrUsername)->orWhere("username", $emailOrUsername)->first();
 
         if (!$user) {
