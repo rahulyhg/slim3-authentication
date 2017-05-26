@@ -29,9 +29,9 @@ $container["auth"] = function($container) {
     return new \App\Auth\Auth();
 };
 
-//$container["csrf"] = function($container) {
-//    return new Slim\Csrf\Guard;
-//};
+$container["csrf"] = function($container) {
+    return new Slim\Csrf\Guard;
+};
 
 $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($container["settings"]["db"]);
@@ -55,11 +55,9 @@ $container["view"] = function ($container) {
         'cache' => false
     ]);
     
-    $view->addExtension(new \Slim\Views\TwigExtension(
-        $container->router,
-        $container->request->getUri()
-    ));
-    
+    $view->addExtension(new \Slim\Views\TwigExtension($container->router, $container->request->getUri()));
+    $view->addExtension(new App\View\CsrfExtension($container["csrf"]));
+
     $view->getEnvironment()->addGlobal("auth", [
         "check" => $container->auth->check(),
         "user" => $container->auth->user(),
@@ -72,9 +70,7 @@ $container["view"] = function ($container) {
 
 $App->add(new App\Middleware\OldInput($container));
 $App->add(new App\Middleware\ValidationErrors($container));
-//$App->add(new App\Middleware\CsrfView($container));
-
-//$App->add($container->csrf);
+$App->add($container->csrf);
 
 Validator::with('App\\Validation\\Rules\\');
 

@@ -52,8 +52,7 @@
                             {% endif %}
                         </div>
                         <button type="submit" class="btn btn-primary">Register</button>
-                        <input type="hidden" name="{{csrf.keys.name}}" value="{{csrf.name}}">
-                        <input type="hidden" name="{{csrf.keys.value}}" value="{{csrf.value}}">
+                        {{ csrf_token() | raw }}
                         <a href="{{ path_for("auth.login") }}" class="btn btn-link">Cancel</a>
                     </form>
                 </div>
