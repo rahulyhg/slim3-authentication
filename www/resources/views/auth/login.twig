@@ -30,7 +30,7 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Login</button>
                         <a href="{{ path_for("auth.register") }}" class="btn btn-link">Register</a>
-                        {{ csrf.html | raw }}
+                        {{ csrf_token() | raw }}
                     </form>
                 </div>
             </div>
