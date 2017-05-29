@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Core\Controller;
 use App\Model\User;
 use App\Model\UserCookie;
+use App\Utility\Cookie;
 use App\Utility\Hash;
+use App\Utility\Session;
 use Respect\Validation\Validator;
 
 /**
@@ -25,6 +27,12 @@ class Auth extends Controller {
      */
     public function getLogout($request, $response) {
         $this->container->auth->logout();
+        if (Cookie::exists("user")) {
+            $cookie = UserCookie::where("hash", Cookie::get("user"))->first();
+            if ($cookie->delete()) {
+                Cookie::delete($cookieName);
+            }
+        }
         return($response->withRedirect($this->router->pathFor("auth.login")));
     }
 
@@ -39,9 +47,6 @@ class Auth extends Controller {
      * 
      */
     public function postLogin($request, $response) {
-        
-        die($hash = UserCookie::where("user_id", 1)->first()->hash);
-        
 
         $validation = $this->validator->validate($request, [
             "email_or_username" => Validator::notEmpty(),
@@ -60,19 +65,21 @@ class Auth extends Controller {
             return($response->withRedirect($this->router->pathFor("auth.login")));
         }
 
-//        if ($request->getParam("remember") === "on") {
-//            $hash = UserCookie::where("user_id", 1)->first()->hash;
-//            if(!$hash) {
-//                $hash = Hash::generateUnique();
-//                $cookie = \UserCookie::create([
-//                    "hash" => $hash,
-//                    "user_id" => 1
-//                ]);
-//            } 
-//        }
+        if ($request->getParam("remember") === "on") {
+            $userId = Session::get("user");
+            $hash = UserCookie::where("user_id", "user")->first()->hash;
+            if (!$hash) {
+                $hash = Hash::generateUnique();
+                UserCookie::create([
+                    "hash" => $hash,
+                    "user_id" => $userId
+                ]);
+            }
+            Cookie::put("user", $hash, 604800);
+        }
         return($response->withRedirect($this->router->pathFor("index")));
-    }    
-    
+    }
+
     /**
      * 
      */

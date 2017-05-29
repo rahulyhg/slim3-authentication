@@ -9,7 +9,7 @@ use App\Utility\Session;
 class Auth {
 
     public function check() {
-        return(Session::exists("user_id"));
+        return(Session::exists("user"));
     }
 
     public function login($emailOrUsername, $password) {
@@ -23,7 +23,7 @@ class Auth {
             return false;
         }
 
-        Session::put("user_id", $user->id);
+        Session::put("user", $user->id);
 
         return true;
     }
@@ -33,7 +33,7 @@ class Auth {
     }
 
     public function user() {
-        return(User::find(Session::get("user_id")));
+        return(User::find(Session::get("user")));
     }
 
 }

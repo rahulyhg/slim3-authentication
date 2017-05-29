@@ -7,7 +7,7 @@ require_once "../../vendor/autoload.php";
 
 Session::init();
 
-$App = new \Slim\App([
+$config = [
     "settings" => [
         "displayErrorDetails" => true,
         "db" => [
@@ -21,7 +21,9 @@ $App = new \Slim\App([
             "prefix" => "",
         ]
     ]
-]);
+];
+
+$App = new \Slim\App($config);
 
 $container = $App->getContainer();
 
@@ -37,7 +39,7 @@ $capsule = new \Illuminate\Database\Capsule\Manager;
 $capsule->addConnection($container["settings"]["db"]);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
-    
+
 $container["db"] = function ($container) use ($capsule) {
     return $capsule;
 };
@@ -54,7 +56,7 @@ $container["view"] = function ($container) {
     $view = new \Slim\Views\Twig("../resources/views", [
         'cache' => false
     ]);
-    
+
     $view->addExtension(new \Slim\Views\TwigExtension($container->router, $container->request->getUri()));
     $view->addExtension(new App\View\CsrfExtension($container["csrf"]));
 
@@ -62,12 +64,13 @@ $container["view"] = function ($container) {
         "check" => $container->auth->check(),
         "user" => $container->auth->user(),
     ]);
-    
+
     $view->getEnvironment()->addGlobal("flash", $container->flash);
-    
+
     return $view;
 };
 
+$App->add(new App\Middleware\LoginWithCookie($container));
 $App->add(new App\Middleware\OldInput($container));
 $App->add(new App\Middleware\ValidationErrors($container));
 $App->add($container->csrf);
