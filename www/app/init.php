@@ -7,69 +7,17 @@ require_once "../../vendor/autoload.php";
 
 Session::init();
 
-$config = [
-    "settings" => [
-        "displayErrorDetails" => true,
-        "db" => [
-            "driver" => "mysql",
-            "host" => "localhost",
-            "database" => "myApp",
-            "username" => "root",
-            "password" => "password",
-            "charset" => "utf8",
-            "collation" => "utf8_unicode_ci",
-            "prefix" => "",
-        ]
-    ]
-];
+define("ROOT", realpath(dirname(__FILE__) . "/../") . "/");
+define("APP_ROOT", ROOT . "app/");
+define("PUBLIC_ROOT", ROOT . "public/");
 
-$App = new \Slim\App($config);
+// App
+$App = new Slim\App(new Slim\Container(include APP_ROOT . 'container.php'));
 
+// Container
 $container = $App->getContainer();
 
-$container["auth"] = function($container) {
-    return new \App\Auth\Auth();
-};
-
-$container["csrf"] = function($container) {
-    return new Slim\Csrf\Guard;
-};
-
-$capsule = new \Illuminate\Database\Capsule\Manager;
-$capsule->addConnection($container["settings"]["db"]);
-$capsule->setAsGlobal();
-$capsule->bootEloquent();
-
-$container["db"] = function ($container) use ($capsule) {
-    return $capsule;
-};
-
-$container["flash"] = function ($container) {
-    return new Slim\Flash\Messages;
-};
-
-$container["validator"] = function ($container) {
-    return new App\Utility\Validator;
-};
-
-$container["view"] = function ($container) {
-    $view = new \Slim\Views\Twig("../resources/views", [
-        'cache' => false
-    ]);
-
-    $view->addExtension(new \Slim\Views\TwigExtension($container->router, $container->request->getUri()));
-    $view->addExtension(new App\View\CsrfExtension($container["csrf"]));
-
-    $view->getEnvironment()->addGlobal("auth", [
-        "check" => $container->auth->check(),
-        "user" => $container->auth->user(),
-    ]);
-
-    $view->getEnvironment()->addGlobal("flash", $container->flash);
-
-    return $view;
-};
-
+// Middleware
 $App->add(new App\Middleware\LoginWithCookie($container));
 $App->add(new App\Middleware\OldInput($container));
 $App->add(new App\Middleware\ValidationErrors($container));
