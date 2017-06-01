@@ -17,13 +17,15 @@ class LoginWithCookie extends Middleware {
      * 
      */
     public function handle($request, $response, $next) {
-        if (!Session::exists("user") and Cookie::exists("user")) {
-            $cookie = UserCookie::where("hash", Cookie::get("user"))->first();
+        $cookieName = $this->container->config->get("cookies/user_remember");
+        $sessionName = $this->container->config->get("sessions/user_id");
+        if (!Session::exists($sessionName) and Cookie::exists($cookieName)) {
+            $cookie = UserCookie::where("hash", Cookie::get($cookieName))->first();
             if ($cookie and User::find($cookie->user_id)) {
-                Session::put("user", $cookie->user_id);
+                Session::put($sessionName, $cookie->user_id);
             } else {
                 UserCookie::destroy($cookie->id);
-                Cookie::delete("user");
+                Cookie::delete($cookieName);
             }
         }
         return $next($request, $response);

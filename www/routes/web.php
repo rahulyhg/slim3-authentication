@@ -6,23 +6,18 @@ use App\Controller\Profile;
 use App\Middleware\RestirctAuth;
 use App\Middleware\RestirctGuests;
 
+
+
+
 // Authenticated only routes
 $App->group("", function () {
-    
-    // Get requests
-    $this->get("/", Index::class . ":getIndex")->setName("index");
-    $this->get("/logout", Auth::class . ":getLogout")->setName("auth.logout");
-    $this->get("/profile/{username}", Profile::class . ":getProfile")->setName("profile");
+    $this->route(["GET"], "/", Index::class, "index")->setName("index");
+    $this->route(["GET"], "/logout", Auth::class, "logout")->setName("auth.logout");
+    $this->route(["GET"], "/profile/{username}", Profile::class, "profile")->setName("profile");
 })->add(new RestirctGuests($container));
 
 // Unauthenticated only routes
 $App->group("", function () {
-    
-    // Get requests
-    $this->get("/login", Auth::class . ":getLogin")->setName("auth.login");
-    $this->get("/register", Auth::class . ":getRegister")->setName("auth.register");
-    
-    // Post requets
-    $this->post("/login", Auth::class . ":postLogin");
-    $this->post("/register", Auth::class . ":postRegister");
+    $this->route(["GET", "POST"], "/login", Auth::class, "login")->setName("auth.login");
+    $this->route(["GET", "POST"], "/register", Auth::class, "register")->setName("auth.register");
 })->add(new RestirctAuth($container));

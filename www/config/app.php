@@ -1,14 +1,11 @@
 <?php
 
 return [
-    "db" => [
-        "driver" => "mysql",
-        "host" => "localhost",
-        "database" => "myApp",
-        "username" => "root",
-        "password" => "password",
-        "charset" => "utf8",
-        "collation" => "utf8_unicode_ci",
-        "prefix" => "",
+    "name" => "myApp",
+    "cookies" => [
+        "user_remember" =>  "user_remember"
+    ],
+    "sessions" => [
+        "user_id" => "user_id"
     ]
 ];

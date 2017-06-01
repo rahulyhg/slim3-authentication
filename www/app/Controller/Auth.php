@@ -18,74 +18,82 @@ class Auth extends Controller {
     /**
      * 
      */
-    public function getLogin($request, $response) {
-        return($this->container->view->render($response, "auth/login.twig"));
+    public function getLogin() {
+        return($this->render("auth/login.twig"));
     }
 
     /**
      * 
      */
-    public function getLogout($request, $response) {
-        $this->container->auth->logout();
-        if (Cookie::exists("user")) {
-            $cookie = UserCookie::where("hash", Cookie::get("user"))->first();
+    public function getLogout() {
+        
+        // 
+        Session::destroy();
+        
+        // 
+        $cookieName = $this->config("cookies/user_remember");
+        if (Cookie::exists($cookieName)) {
+            $cookie = UserCookie::where("hash", Cookie::get($cookieName))->first();
             if ($cookie->delete()) {
                 Cookie::delete($cookieName);
             }
         }
-        return($response->withRedirect($this->router->pathFor("auth.login")));
+        return($this->redirect("auth.login"));
     }
 
     /**
      * 
      */
-    public function getRegister($request, $response) {
-        return($this->container->view->render($response, "auth/register.twig"));
+    public function getRegister() {
+        return($this->render("auth/register.twig"));
     }
 
     /**
      * 
      */
-    public function postLogin($request, $response) {
+    public function postLogin() {
 
-        $validation = $this->validator->validate($request, [
+        // 
+        $validation = $this->validate([
             "email_or_username" => Validator::notEmpty(),
             "password" => Validator::notEmpty()
         ]);
 
+        // 
         if (!$validation->passed()) {
-            return($response->withRedirect($this->router->pathFor("auth.login")));
+            return($this->redirect("auth.login"));
         }
 
-        $email = $request->getParam("email_or_username");
-        $password = $request->getParam("password");
-
-        if (!$this->container->auth->login($email, $password)) {
-            $this->flash->addMessage("danger", "The login credentials combination you have entered is incorrect");
-            return($response->withRedirect($this->router->pathFor("auth.login")));
+        //
+        $emailOrUsername = $this->param("email_or_username");
+        $user = User::where("email", $emailOrUsername)->orWhere("username", $emailOrUsername)->first();
+        if (!$user or $user->password !== Hash::generate($this->param("password"), $user->salt)) {
+            $this->flash("danger", $this->text("login/invalid"));
+            return($this->redirect("auth.login"));
         }
 
-        if ($request->getParam("remember") === "on") {
-            $userId = Session::get("user");
-            $hash = UserCookie::where("user_id", "user")->first()->hash;
+        // 
+        Session::put($this->config("sessions/user_id"), $user->id);
+
+        // 
+        if ($this->param("remember") === "on") {
+            $hash = UserCookie::where("user_id", $user->id)->first()->hash;
             if (!$hash) {
                 $hash = Hash::generateUnique();
-                UserCookie::create([
-                    "hash" => $hash,
-                    "user_id" => $userId
-                ]);
+                UserCookie::create(["hash" => $hash, "user_id" => $user->id]);
             }
             Cookie::put("user", $hash, 604800);
         }
-        return($response->withRedirect($this->router->pathFor("index")));
+        return($this->redirect("index"));
     }
 
     /**
      * 
      */
-    public function postRegister($request, $response) {
+    public function postRegister() {
 
-        $validation = $this->validator->validate($request, [
+        // 
+        $validation = $this->validate([
             "forename" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
             "surname" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
             "username" => Validator::max(32)->notEmpty()->noWhitespace()->alnum(),
@@ -94,26 +102,30 @@ class Auth extends Controller {
             "password_repeat" => Validator::max(8)->notEmpty()->noWhitespace()->identical("password"),
         ]);
 
+        // 
         if (!$validation->passed()) {
-            return($response->withRedirect($this->router->pathFor("auth.register")));
+            return($this->redirect("auth.register"));
         }
 
+        // 
         $user = User::create([
-                    "salt" => ($salt = Hash::generateSalt(32)),
-                    "email" => $request->getParam("email"),
-                    "forename" => $request->getParam("forename"),
-                    "password" => Hash::generate($request->getParam("password"), $salt),
-                    "surname" => $request->getParam("surname"),
-                    "username" => $request->getParam("username")
+            "salt" => ($salt = Hash::generateSalt(32)),
+            "email" => $this->param("email"),
+            "forename" => $this->param("forename"),
+            "password" => Hash::generate($this->param("password"), $salt),
+            "surname" => $this->param("surname"),
+            "username" => $this->param("username")
         ]);
 
+        // 
         if (!$user) {
-            $this->flash->addMessage("danger", "There was a problem creating your account!");
-            return($response->withRedirect($this->router->pathFor("auth.register")));
+            $this->flash("danger", $this->text("register/error"));
+            return($this->redirect("auth.register"));
         }
 
-        $this->flash->addMessage("success", "Your account has been successfully created!");
-        return($response->withRedirect($this->router->pathFor("auth.login")));
+        // 
+        $this->flash("success", $this->text("register/success"));
+        return($this->redirect("auth.login"));
     }
 
 }

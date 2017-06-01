@@ -3,17 +3,34 @@
 namespace App\Core;
 
 class Config {
-    
-    private $_settings = [];
-    
-    public function __construct(array $settings) {
-        $this->_settings = $settings;
+
+    private $_data = [];
+
+    public function __construct($path) {
+        if (is_dir($path)) {
+            $paths = glob($path . "/*.*");
+            if (empty($paths)) {
+                
+            }
+        }
+        foreach ($paths as $path) {
+            $this->_data = array_replace_recursive($this->_data, require_once $path);
+        }
     }
 
     public function get($key, $default = null) {
-        if(isset($this->_settings[$key])) {
-            return $this->_settings[$key];
+        $config = $this->_data;
+        $path = explode("/", $key);
+        if (!$path) {
+            return $default;
         }
+        foreach ($path as $bit) {
+            if (!isset($config[$bit])) {
+                return $default;
+            }
+            $config = $config[$bit];
+        }
+        return $config;
     }
 
 }

@@ -3,37 +3,32 @@
 namespace App\Auth;
 
 use App\Model\User;
-use App\Utility\Hash;
 use App\Utility\Session;
 
 class Auth {
 
+    /** @var type  */
+    private $_sessionName;
+
+    /**
+     * 
+     */
+    public function __construct($sessionName) {
+        $this->_sessionName = $sessionName;
+    }
+
+    /**
+     * 
+     */
     public function check() {
-        return(Session::exists("user"));
+        return(Session::exists($this->_sessionName));
     }
 
-    public function login($emailOrUsername, $password) {
-        $user = User::where("email", $emailOrUsername)->orWhere("username", $emailOrUsername)->first();
-
-        if (!$user) {
-            return false;
-        }
-
-        if ($user->password !== Hash::generate($password, $user->salt)) {
-            return false;
-        }
-
-        Session::put("user", $user->id);
-
-        return true;
-    }
-
-    public function logout() {
-        Session::destroy();
-    }
-
+    /**
+     * 
+     */
     public function user() {
-        return(User::find(Session::get("user")));
+        return(User::find(Session::get($this->_sessionName)));
     }
 
 }
