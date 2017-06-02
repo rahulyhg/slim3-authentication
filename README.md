@@ -8,3 +8,4 @@
 * https://github.com/illuminate/database
 * https://laravel.com/api/5.1/Illuminate/Database/Eloquent/Model.html
 * https://github.com/Respect/Validation
+* https://github.com/devsavage/slim-3-authentication/tree/da058a78236b714187ae28ef85540b088caf2a0d

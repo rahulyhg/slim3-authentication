@@ -77,6 +77,13 @@ abstract class Controller {
     /**
      * 
      */
+    protected function user() {
+        return($this->auth()->user());
+    }
+
+    /**
+     * 
+     */
     protected function validate(array $rules) {
         return($this->container->validator->validate($this->request, $rules));
     }

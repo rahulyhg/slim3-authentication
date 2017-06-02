@@ -7,8 +7,8 @@ use App\Core\Middleware;
 class RestirctGuests extends Middleware {
 
     public function handle($request, $response, $next) {
-        if (!$this->container->auth->check()) {
-            return $response->withRedirect($this->container->router->pathFor("auth.login"));
+        if (!$this->auth()->check()) {
+            return($this->redirect("auth.login"));
         }
         return $next($request, $response);
     }
