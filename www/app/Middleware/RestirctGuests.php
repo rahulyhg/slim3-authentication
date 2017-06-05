@@ -8,9 +8,11 @@ class RestirctGuests extends Middleware {
 
     public function handle($request, $response, $next) {
         if (!$this->auth()->check()) {
-            return($this->redirect("auth.login"));
+            $this->flash("danger", $this->text(""));
+            return($this->redirect($response, "auth.login"));
         }
-        return $next($request, $response);
+        $response = $next($request, $response);
+        return $response;
     }
 
 }

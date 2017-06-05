@@ -1,14 +1,5 @@
 <?php
 
-use App\Auth\Auth;
-use App\Core\Config;
-use App\Utility\Validator;
-use Slim\Csrf\Guard as Csrf;
-use Illuminate\Database\Capsule\Manager as Capsule;
-use Slim\Flash\Messages as Flash;
-use Slim\Views\Twig;
-use Slim\Views\TwigExtension;
-
 return [
     // Settings
     "settings" => [
@@ -17,39 +8,49 @@ return [
     // Auth
     "auth" => function($container) {
         $sessionName = $container->config->get("sessions/user_id");
-        return(new Auth($sessionName));
+        return(new App\Auth\Auth($sessionName));
     },
     // Config
     "config" => function(){
-      return(new Config(ROOT . "config"));  
+      return(new App\Core\Config(ROOT . "config"));  
     },
     // Csrf
-    "csrf" => function() {
-        return(new Csrf);
+    "csrf" => function($container) {
+        $guard = new Slim\Csrf\Guard;
+        $guard->setFailureCallable(function($request, $response, $next) use ($container) {
+            $request = $request->withAttribute("csrf_status", false);
+            if($request->getAttribute("csrf_status") === false) {
+                $container->flash->addMessage("danger", "CSRF verification failed, terminating your request.");
+                return($response->withStatus(400)->withRedirect($container->router->pathFor("index")));
+            } else {
+                return $next($request, $response);
+            }
+        });
+        return $guard;
     },
     // Database
     "db" => function($container){
-        $capsule = new Capsule;
+        $capsule = new Illuminate\Database\Capsule\Manager;
         $capsule->addConnection($container->config->get("database"));
         $capsule->setAsGlobal();
         return $capsule;
     },
     // Flash
     "flash" => function() {
-        return(new Flash);
+        return(new Slim\Flash\Messages);
     },
     // Validator
     "validator" => function() {
         Respect\Validation\Validator::with("App\\Utility\\Validator\\Rules");
-        return(new Validator);
+        return(new App\Utility\Validator);
     },
     // View
     "view" => function($container) {
-        $view = new Twig(ROOT . "resources/views", [
+        $view = new Slim\Views\Twig(ROOT . "resources/views", [
             "cache" => false
         ]);
 
-        $view->addExtension(new TwigExtension($container->router, $container->request->getUri()));
+        $view->addExtension(new Slim\Views\TwigExtension($container->router, $container->request->getUri()));
 
         $view->addExtension(new App\View\CsrfExtension($container["csrf"]));
 

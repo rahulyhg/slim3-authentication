@@ -8,9 +8,10 @@ class RestirctAuth extends Middleware {
 
     public function handle($request, $response, $next) {
         if ($this->auth()->check()) {
-            return($this->redirect("index"));
+            return($this->redirect($response, "index"));
         }
-        return $next($request, $response);
+        $response = $next($request, $response);
+        return $response;
     }
 
 }

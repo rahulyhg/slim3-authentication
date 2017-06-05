@@ -7,9 +7,10 @@ use App\Middleware\RestirctAuth;
 use App\Middleware\RestirctGuests;
 use App\Middleware\RestrictNonAdmin;
 
+$App->route(["GET"], "/", Index::class, "index")->setName("index");
+
 // Authenticated only routes
 $App->group("", function () {
-    $this->route(["GET"], "/", Index::class, "index")->setName("index");
     $this->route(["GET"], "/logout", Auth::class, "logout")->setName("auth.logout");
     $this->route(["GET"], "/profile/{username}", Profile::class, "profile")->setName("profile");
 })->add(new RestirctGuests($container));

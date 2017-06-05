@@ -55,8 +55,8 @@ abstract class Middleware {
     /**
      * 
      */
-    protected function redirect($path, array $data = [], array $params = []) {
-        return($this->response->withRedirect($this->container->router->pathFor($path, $data, $params)));
+    protected function redirect($response, $path, array $data = [], array $params = []) {
+        return($response->withRedirect($this->container->router->pathFor($path, $data, $params)));
     }
 
     /**
