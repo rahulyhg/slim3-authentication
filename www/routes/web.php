@@ -1,27 +1,24 @@
 <?php
 
-use App\Controller\Auth;
-use App\Controller\Index;
-use App\Controller\Profile;
-use App\Middleware\RestirctAuth;
-use App\Middleware\RestirctGuests;
-use App\Middleware\RestrictNonAdmin;
+use App\Controller;
+use App\Middleware;
 
-$App->route(["GET"], "/", Index::class, "index")->setName("index");
+$App->route(["GET"], "/", Controller\Index::class, "index")->setName("index");
 
 // Authenticated only routes
 $App->group("", function () {
-    $this->route(["GET"], "/logout", Auth::class, "logout")->setName("auth.logout");
-    $this->route(["GET"], "/profile/{username}", Profile::class, "profile")->setName("profile");
-})->add(new RestirctGuests($container));
+    $this->route(["GET"], "/logout", Controller\Auth::class, "logout")->setName("auth.logout");
+    $this->route(["GET"], "/profile/{username}", Controller\Profile::class, "profile")->setName("profile");
+})->add(new Middleware\RestirctGuests($container));
 
+// Admin only routes
 $App->group("/admin", function() {
-    $this->route(["GET"], "/", "")->setName("admin.index");
-})->add(new RestrictNonAdmin($container));
+    $this->route(["GET"], "", Controller\Admin::class)->setName("admin.index");
+})->add(new Middleware\RestrictNonAdmin($container));
 
 // Unauthenticated only routes
 $App->group("", function () {
-    $this->route(["GET", "POST"], "/login", Auth::class, "login")->setName("auth.login");
-    $this->route(["GET", "POST"], "/register", Auth::class, "register")->setName("auth.register");
-})->add(new RestirctAuth($container));
+    $this->route(["GET", "POST"], "/login", Controller\Auth::class, "login")->setName("auth.login");
+    $this->route(["GET", "POST"], "/register", Controller\Auth::class, "register")->setName("auth.register");
+})->add(new Middleware\RestirctAuth($container));
 

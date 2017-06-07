@@ -10,7 +10,8 @@ class OldInput extends Middleware {
     public function handle($request, $response, $next) {
         $this->test("input", Session::get("input"));
         Session::put("input", $request->getParams());
-        return $next($request, $response);
+        $response = $next($request, $response);
+        return $response;
     }
 
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

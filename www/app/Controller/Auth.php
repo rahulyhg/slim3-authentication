@@ -26,18 +26,18 @@ class Auth extends Controller {
      * 
      */
     public function getLogout() {
-        
+
         // 
         Session::destroy();
-        
-        // 
-        $cookieName = $this->config("cookies/user_remember");
-        if (Cookie::exists($cookieName)) {
-            $cookie = UserCookie::where("hash", Cookie::get($cookieName))->first();
-            if ($cookie->delete()) {
-                Cookie::delete($cookieName);
-            }
-        }
+
+//        // 
+//        $key = $this->config("cookies/user_remember");
+//        if (Cookie::exists($key)) {
+//            $user = $this->auth()->user();
+//            if ($user->removeRememberCredentials()) {
+//                Cookie::delete($key);
+//            }
+//        }
         return($this->redirect("auth.login"));
     }
 
@@ -52,7 +52,7 @@ class Auth extends Controller {
      * 
      */
     public function postLogin() {
-        
+
         // 
         $validation = $this->validate([
             "email_or_username" => Validator::notEmpty(),
@@ -77,13 +77,15 @@ class Auth extends Controller {
 
         // 
         if ($this->param("remember") === "on") {
-            $hash = UserCookie::where("user_id", $user->id)->first()->hash;
-            if (!$hash) {
-                $hash = Hash::generateUnique();
-                UserCookie::create(["hash" => $hash, "user_id" => $user->id]);
+            $rememberIdentifier = Hash::generateSalt(128);
+            $rememberToken = Hash::generateSalt(128);
+            if ($user->updateRememberCredentials($rememberIdentifier, Hash::generate($rememberToken))) {
+                $key = $this->config("cookies/user_remember");
+                $value = "{$rememberIdentifier}.{$rememberToken}";
+                Cookie::put($key, $value, 604800);
             }
-            Cookie::put("user", $hash, 604800);
         }
+
         return($this->redirect("index"));
     }
 
@@ -109,12 +111,12 @@ class Auth extends Controller {
 
         // 
         $user = User::create([
-            "salt" => ($salt = Hash::generateSalt(32)),
-            "email" => $this->param("email"),
-            "forename" => $this->param("forename"),
-            "password" => Hash::generate($this->param("password"), $salt),
-            "surname" => $this->param("surname"),
-            "username" => $this->param("username")
+                    "salt" => ($salt = Hash::generateSalt(32)),
+                    "email" => $this->param("email"),
+                    "forename" => $this->param("forename"),
+                    "password" => Hash::generate($this->param("password"), $salt),
+                    "surname" => $this->param("surname"),
+                    "username" => $this->param("username")
         ]);
 
         // 

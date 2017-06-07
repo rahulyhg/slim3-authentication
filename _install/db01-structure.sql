@@ -45,24 +45,13 @@ CREATE TABLE IF NOT EXISTS `users` (
     `email` VARCHAR(254) NOT NULL,
     `forename` VARCHAR(100) NOT NULL,
     `password` TEXT NOT NULL,
+    `remember_token` VARCHAR(255) DEFAULT NULL,
+    `remember_identifier` VARCHAR(255) DEFAULT NULL,
     `salt` TEXT NOT NULL,
     `surname` VARCHAR(100) NOT NULL,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `username` VARCHAR(32) NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table 'user_cookies'
---
-CREATE TABLE IF NOT EXISTS `user_cookies` (
-    `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `hash` TEXT NOT NULL,
-    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `user_id` BIGINT(20) NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY `user_cookies_user_id` (`user_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 --

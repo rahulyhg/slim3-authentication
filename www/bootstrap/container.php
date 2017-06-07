@@ -1,20 +1,27 @@
 <?php
 
 return [
+    // 
     // Settings
+    // -------------------------------------------------------------------------
     "settings" => [
         "displayErrorDetails" => true
     ],
+    // 
     // Auth
-    "auth" => function($container) {
-        $sessionName = $container->config->get("sessions/user_id");
-        return(new App\Auth\Auth($sessionName));
+    // -------------------------------------------------------------------------
+    "auth" => function() {
+        return(new App\Auth\Auth);
     },
+    // 
     // Config
+    // -------------------------------------------------------------------------
     "config" => function(){
       return(new App\Core\Config(ROOT . "config"));  
     },
+    //
     // Csrf
+    // -------------------------------------------------------------------------
     "csrf" => function($container) {
         $guard = new Slim\Csrf\Guard;
         $guard->setFailureCallable(function($request, $response, $next) use ($container) {
@@ -28,23 +35,31 @@ return [
         });
         return $guard;
     },
+    //
     // Database
+    // -------------------------------------------------------------------------
     "db" => function($container){
         $capsule = new Illuminate\Database\Capsule\Manager;
         $capsule->addConnection($container->config->get("database"));
         $capsule->setAsGlobal();
         return $capsule;
     },
+    //
     // Flash
+    // -------------------------------------------------------------------------
     "flash" => function() {
         return(new Slim\Flash\Messages);
     },
+    // 
     // Validator
+    // -------------------------------------------------------------------------
     "validator" => function() {
         Respect\Validation\Validator::with("App\\Utility\\Validator\\Rules");
         return(new App\Utility\Validator);
     },
+    // 
     // View
+    // -------------------------------------------------------------------------
     "view" => function($container) {
         $view = new Slim\Views\Twig(ROOT . "resources/views", [
             "cache" => false
