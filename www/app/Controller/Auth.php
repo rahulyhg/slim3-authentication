@@ -30,14 +30,14 @@ class Auth extends Controller {
         // 
         Session::destroy();
 
-//        // 
-//        $key = $this->config("cookies/user_remember");
-//        if (Cookie::exists($key)) {
-//            $user = $this->auth()->user();
-//            if ($user->removeRememberCredentials()) {
-//                Cookie::delete($key);
-//            }
-//        }
+        // 
+        $key = $this->config("cookies/user_remember");
+        if (Cookie::exists($key)) {
+            $user = $this->auth()->user();
+            if ($user->removeRememberCredentials()) {
+                Cookie::delete($key);
+            }
+        }
         return($this->redirect("auth.login"));
     }
 
