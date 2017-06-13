@@ -11,6 +11,13 @@ $App->group("", function () {
     $this->route(["GET"], "/profile/{username}", Controller\Profile::class, "profile")->setName("profile");
 })->add(new Middleware\RestirctGuests($container));
 
+// Authenticated only routes
+$App->group("/settings", function () {
+    $this->route(["GET", "POST"], "/account", Controller\User::class, "account")->setName("user.account");
+    $this->route(["GET", "POST"], "/password", Controller\User::class, "password")->setName("user.password");
+    $this->route(["GET", "POST"], "/profile", Controller\User::class, "profile")->setName("user.profile");
+})->add(new Middleware\RestirctGuests($container));
+
 // Admin only routes
 $App->group("/admin", function() {
     $this->route(["GET"], "", Controller\Admin::class)->setName("admin.index");

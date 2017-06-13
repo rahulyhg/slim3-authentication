@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Utility;
+namespace App\Validation;
 
+use App\Utility;
 use Respect\Validation\Exceptions\NestedValidationException;
 
 /**
@@ -24,7 +25,7 @@ class Validator {
                 $this->_errors[$field] = $ex->getMessages();
             }
         }
-        Session::put("errors", $this->_errors);
+        Utility\Session::put("errors", $this->_errors);
         return $this;
     }
 

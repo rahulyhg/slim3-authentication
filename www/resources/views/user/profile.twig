@@ -1,0 +1,27 @@
+{% extends "template.twig" %}
+{% block title %}Profile Settings{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <form action="{{ path_for("user.profile") }}" method="post" name="account">
+                <div class="form-group{{ errors.forename ? ' has-error' : '' }}">
+                    <label for="forename-input" class="control-label">Forename <span class="text-danger">*</span></label>
+                    <input type="text" id="forename-input" class="form-control" name="forename" value="{{ input.forename ? input.forename : auth.user.forename }}" />
+                    {% if errors.forename %}
+                        <span class="help-block">{{ errors.forename | first }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group{{ errors.surname ? ' has-error' : '' }}">
+                    <label for="surname-input" class="control-label">Surname <span class="text-danger">*</span></label>
+                    <input type="text" id="surname-input" class="form-control" name="surname" value="{{ input.surname ? input.surname : auth.user.surname }}" />
+                    {% if errors.surname %}
+                        <span class="help-block">{{ errors.surname | first }}</span>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                {{ csrf_token() | raw }}
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+{% endblock %}

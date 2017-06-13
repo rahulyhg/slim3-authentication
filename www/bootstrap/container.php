@@ -54,8 +54,7 @@ return [
     // Validator
     // -------------------------------------------------------------------------
     "validator" => function() {
-        Respect\Validation\Validator::with("App\\Utility\\Validator\\Rules");
-        return(new App\Utility\Validator);
+        return(new App\Validation\Validator);
     },
     // 
     // View

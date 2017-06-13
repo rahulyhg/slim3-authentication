@@ -2,8 +2,6 @@
 
 namespace App\Core;
 
-use Interop\Container\ContainerInterface;
-
 /**
  * 
  */
@@ -15,7 +13,7 @@ abstract class Middleware {
     /**
      * 
      */
-    public function __construct(ContainerInterface $container) {
+    public function __construct($container) {
         $this->container = $container;
     }
 
