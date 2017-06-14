@@ -2,100 +2,94 @@
 
 namespace App\Controller;
 
-use Exception;
 use App\Core;
 use App\Utility;
-use Respect\Validation\Validator;
+use Respect\Validation\Validator as v;
 
+/**
+ * User Controller:
+ */
 class User extends Core\Controller {
 
+    /**
+     * Get Account:
+     */
     public function getAccount() {
         return($this->render("user/account.twig"));
     }
 
+    /**
+     * Get Password:
+     */
     public function getPassword() {
         return($this->render("user/password.twig"));
     }
 
+    /**
+     * Get Profile:
+     */
     public function getProfile() {
         return($this->render("user/profile.twig"));
     }
 
+    /**
+     * Post Account:
+     */
     public function postAccount() {
-
-        // 
         $validation = $this->validate([
-            "username" => Validator::max(32)->notEmpty()->noWhitespace()->alnum(),
-            "email" => Validator::max(254)->notEmpty()->noWhitespace()->email()->emailUnique($this->auth())
+            "username" => v::max(32)->notEmpty()->noWhitespace()->alnum()->usernameUnique($this->user()->username),
+            "email" => v::max(254)->notEmpty()->noWhitespace()->email()->emailUnique($this->user()->email)
         ]);
-        
-        return($this->redirect("user.account"));
-
-        // 
         if ($validation->passed()) {
-            $user = $this->user()->update([]);
+            $user = $this->user()->update([
+                "username" => $this->param("username"),
+                "email" => $this->param("email")
+            ]);
             if ($user) {
-                $this->flash("success", $this->text(""));
-                $this->redirect("");
+                $this->flash("success", $this->text("user/account_updated"));
             }
         }
-
-        //
-        $this->flash("danger", $this->text(""));
-        $this->redirect("");
+        return($this->redirect("user.account"));
     }
 
+    /**
+     * Post Password:
+     */
     public function postPassword() {
-
-        // 
         $validation = $this->validate([
-            "current_password" => Validator::notEmpty()->noWhitespace(),
-            "new_password" => Validator::max(8)->notEmpty()->noWhitespace(),
-            "new_password_repeat" => Validator::max(8)->notEmpty()->noWhitespace()->identical("new_password")
+            "current_password" => v::notEmpty()->noWhitespace(),
+            "new_password" => v::max(8)->notEmpty()->noWhitespace()->identical($this->param("new_password_repeat")),
+            "new_password_repeat" => v::max(8)->notEmpty()->noWhitespace()->identical($this->param("new_password"))
         ]);
-
-        // 
         if ($validation->passed()) {
-            
-            // 
-            $user = $this->user();
-            if ($user->password !== Hash::generate($this->param("current_password"), $user->salt)) {
-                $this->flash("danger", $this->text(""));
-                return($this->redirect("user.password"));
-            }
-
-            //
-            $salt = Utility\Hash::generateSalt(32);
-            $password = Utility\Hash::generate($this->param("new_password"), $salt);
-            if ($user->update(["password" => $password, "salt" => $salt])) {
-                $this->flash("success", $this->text(""));
+            if ($this->user()->password !== Utility\Hash::generate($this->param("current_password"), $this->user()->salt)) {
+                $this->flash("danger", $this->text("user/password_invalid"));
+            } else {
+                $this->user()->update([
+                    "salt" => ($salt = Utility\Hash::generateSalt(32)),
+                    "password" => Utility\Hash::generate($this->param("new_password"), $salt)
+                ]);
+                $this->flash("success", $this->text("user/password_updated"));
             }
         }
-
-        // 
         return($this->redirect("user.password"));
     }
 
+    /**
+     * Post Profile:
+     */
     public function postProfile() {
-
-        // 
         $validation = $this->validate([
-            "forename" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
-            "surname" => Validator::max(100)->notEmpty()->noWhitespace()->alpha()
+            "forename" => v::max(100)->notEmpty()->noWhitespace()->alpha(),
+            "surname" => v::max(100)->notEmpty()->noWhitespace()->alpha()
         ]);
-
-        // 
         if ($validation->passed()) {
-            $user = $this->user()->update([
+            $this->user()->update([
                 "forename" => $this->param("forename"),
                 "surname" => $this->param("surname")
             ]);
-            if ($user) {
-                $this->flash("success", $this->text(""));
-            }
+            $this->flash("success", $this->text("user/profile_updated"));
         }
-
-        //
         return($this->redirect("user.profile"));
     }
 
