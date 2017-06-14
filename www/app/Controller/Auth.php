@@ -98,10 +98,10 @@ class Auth extends Controller {
         $validation = $this->validate([
             "forename" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
             "surname" => Validator::max(100)->notEmpty()->noWhitespace()->alpha(),
-            "username" => Validator::max(32)->notEmpty()->noWhitespace()->alnum(),
-            "email" => Validator::max(254)->notEmpty()->noWhitespace()->email()->emailUnique($this->auth()),
-            "password" => Validator::max(8)->notEmpty()->noWhitespace(),
-            "password_repeat" => Validator::max(8)->notEmpty()->noWhitespace()->identical("password"),
+            "username" => Validator::max(32)->notEmpty()->noWhitespace()->alnum()->usernameUnique(),
+            "email" => Validator::max(254)->notEmpty()->noWhitespace()->email()->emailUnique(),
+            "password" => Validator::max(8)->notEmpty()->noWhitespace()->identical($this->param("password_repeat")),
+            "password_repeat" => Validator::max(8)->notEmpty()->noWhitespace()->identical($this->param("password")),
         ]);
 
         // 
