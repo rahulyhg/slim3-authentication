@@ -41,13 +41,11 @@ class User extends Core\Controller {
             "email" => v::max(254)->notEmpty()->noWhitespace()->email()->emailUnique($this->user()->email)
         ]);
         if ($validation->passed()) {
-            $user = $this->user()->update([
+            $this->user()->update([
                 "username" => $this->param("username"),
                 "email" => $this->param("email")
             ]);
-            if ($user) {
-                $this->flash("success", $this->text("user/account_updated"));
-            }
+            $this->flash("success", $this->text("user/account_updated"));
         }
         return($this->redirect("user.account"));
     }
