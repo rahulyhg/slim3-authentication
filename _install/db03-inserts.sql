@@ -36,8 +36,8 @@ INSERT INTO `role_permissions` (`id`, `role_id`, `permission_id`) VALUES
 --
 -- Inserts for table 'users'
 --
-INSERT INTO `users` (`id`, `email`, `forename`, `password`, `salt`, `surname`, `username`) VALUES
-    (1, 'admin@mail.com', 'Andrew', 'ea2959d87ea2974afcd45c6224d2e5322bc349db8e65f8a3c7460e2a8fb9a883', '>TrKAx^/<E^+aX!-5K|}pL!Po9(gH_Fr', 'Dyer', 'admin');
+INSERT INTO `users` (`id`, `activated`, `email`, `forename`, `password`, `salt`, `surname`, `username`) VALUES
+    (1, true, 'admin@mail.com', 'Andrew', 'ea2959d87ea2974afcd45c6224d2e5322bc349db8e65f8a3c7460e2a8fb9a883', '>TrKAx^/<E^+aX!-5K|}pL!Po9(gH_Fr', 'Dyer', 'admin');
 
 --
 -- Inserts for table 'user_roles'

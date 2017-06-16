@@ -14,12 +14,14 @@ class User extends Core\Model {
 
     /** @var array */
     protected $fillable = [
-        "salt",
+        "activated",
+        "activation_code",
         "email",
         "forename",
         "password",
         "remember_token",
         "remember_identifier",
+        "salt",
         "surname",
         "username"
     ];
@@ -64,8 +66,8 @@ class User extends Core\Model {
      */
     public function updateRememberCredentials($identifier, $token) {
         return $this->update([
-            "remember_identifier" => $identifier,
-            "remember_token" => $token
+                    "remember_identifier" => $identifier,
+                    "remember_token" => $token
         ]);
     }
 

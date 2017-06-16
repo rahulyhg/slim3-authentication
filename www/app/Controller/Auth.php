@@ -110,17 +110,17 @@ class Auth extends Controller {
         }
 
         // 
-        $user = User::create([
-                    "salt" => ($salt = Hash::generateSalt(32)),
-                    "email" => $this->param("email"),
-                    "forename" => $this->param("forename"),
-                    "password" => Hash::generate($this->param("password"), $salt),
-                    "surname" => $this->param("surname"),
-                    "username" => $this->param("username")
-        ]);
+        $data = [
+            "salt" => ($salt = Hash::generateSalt(32)),
+            "email" => $this->param("email"),
+            "forename" => $this->param("forename"),
+            "password" => Hash::generate($this->param("password"), $salt),
+            "surname" => $this->param("surname"),
+            "username" => $this->param("username")
+        ];
 
         // 
-        if (!$user) {
+        if (!User::create($data)) {
             $this->flash("danger", $this->text("register/error"));
             return($this->redirect("auth.register"));
         }

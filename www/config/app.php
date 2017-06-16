@@ -2,6 +2,9 @@
 
 return [
     "name" => "myApp",
+    "app" => [
+        "activation" => false
+    ],
     "cookies" => [
         "user_remember" =>  "user_remember"
     ],

@@ -25,7 +25,7 @@ $App->group("/admin", function() {
 
 // Unauthenticated only routes
 $App->group("", function () {
-    $this->route(["GET", "POST"], "/login", Controller\Auth::class, "login")->setName("auth.login");
-    $this->route(["GET", "POST"], "/register", Controller\Auth::class, "register")->setName("auth.register");
+    $this->route(["GET", "POST"], "/login", Controller\Auth\Login::class)->setName("auth.login");
+    $this->route(["GET", "POST"], "/register", Controller\Auth\Register::class)->setName("auth.register");
 })->add(new Middleware\RestirctAuth($container));
 
