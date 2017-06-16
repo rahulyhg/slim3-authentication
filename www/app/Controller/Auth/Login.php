@@ -4,6 +4,7 @@ namespace App\Controller\Auth;
 
 use App\Core\Controller;
 use App\Model\User;
+use App\Utility\Cookie;
 use App\Utility\Hash;
 use App\Utility\Session;
 use Respect\Validation\Validator as v;
