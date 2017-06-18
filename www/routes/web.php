@@ -7,7 +7,7 @@ $App->route(["GET"], "/", Controller\Index::class, "index")->setName("index");
 
 // Authenticated only routes
 $App->group("", function () {
-    $this->route(["GET"], "/logout", Controller\Auth::class, "logout")->setName("auth.logout");
+    $this->route(["GET"], "/logout", Controller\Auth\Logout::class)->setName("auth.logout");
     $this->route(["GET"], "/profile/{username}", Controller\Profile::class, "profile")->setName("profile");
 })->add(new Middleware\RestirctGuests($container));
 
