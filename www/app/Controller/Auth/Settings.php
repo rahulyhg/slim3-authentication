@@ -1,17 +1,23 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Auth;
 
-use App\Core;
-use App\Utility;
-use Respect\Validation\Validator as v;
+use App\Core\Controller;
 
-/**
- * User Controller:
- */
-class User extends Core\Controller {
+class Settings extends Controller {
 
+    public function getAccount() {
+        return($this->render("auth/account.twig"));
+    }
 
+    public function getPassword() {
+        return($this->render("auth/password.twig"));
+    }
+
+    public function getProfile() {
+        return($this->render("auth/profile.twig"));
+    }
+    
     public function postAccount() {
         $validation = $this->validate([
             "username" => v::max(32)->notEmpty()->noWhitespace()->alnum()->usernameUnique($this->user()->username),
@@ -61,5 +67,4 @@ class User extends Core\Controller {
         }
         return($this->redirect("user.profile"));
     }
-
 }
