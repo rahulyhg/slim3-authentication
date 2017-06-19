@@ -13,9 +13,9 @@ $App->group("", function () {
 
 // Authenticated only routes
 $App->group("/settings", function () {
-    $this->route(["GET", "POST"], "/account", Controller\User::class, "account")->setName("user.account");
-    $this->route(["GET", "POST"], "/password", Controller\User::class, "password")->setName("user.password");
-    $this->route(["GET", "POST"], "/profile", Controller\User::class, "profile")->setName("user.profile");
+    $this->route(["GET", "POST"], "/account", Controller\Auth\Settings::class, "account")->setName("auth.account");
+    $this->route(["GET", "POST"], "/password", Controller\Auth\Settings::class, "password")->setName("auth.password");
+    $this->route(["GET", "POST"], "/profile", Controller\Auth\Settings::class, "profile")->setName("auth.profile");
 })->add(new Middleware\RestirctGuests($container));
 
 // Admin only routes

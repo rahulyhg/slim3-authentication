@@ -3,7 +3,7 @@
 {% block content %}
     <div class="row">
         <div class="col-md-8">
-            <form action="{{ path_for("user.profile") }}" method="post" name="account">
+            <form action="{{ path_for("auth.profile") }}" method="post" name="account">
                 <div class="form-group{{ errors.forename ? ' has-error' : '' }}">
                     <label for="forename-input" class="control-label">Forename <span class="text-danger">*</span></label>
                     <input type="text" id="forename-input" class="form-control" name="forename" value="{{ input.forename ? input.forename : auth.user.forename }}" />
