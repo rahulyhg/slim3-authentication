@@ -2,12 +2,16 @@
 
 namespace App\Model;
 
-use App\Core;
+use App\Core\Model;
+use App\Traits\Permissions;
+
 
 /**
  * 
  */
-class User extends Core\Model {
+class User extends Model {
+    
+    use Permissions;
 
     /** @var string */
     protected $table = "users";
@@ -51,14 +55,14 @@ class User extends Core\Model {
      * 
      */
     public function isAdmin() {
-        return true;
+        return($this->hasRole("Admin"));
     }
 
     /**
      * 
      */
     public function isSuperAdmin() {
-        return true;
+        return($this->hasRole("Super Admin"));
     }
 
     /**
