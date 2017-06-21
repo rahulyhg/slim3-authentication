@@ -58,12 +58,18 @@ class Settings extends Controller {
     public function postProfile() {
         $validation = $this->validate([
             "forename" => v::max(100)->notEmpty()->noWhitespace()->alpha(),
-            "surname" => v::max(100)->notEmpty()->noWhitespace()->alpha()
+            "surname" => v::max(100)->notEmpty()->noWhitespace()->alpha(),
+            "biography" => v::max(160),
+            "location" => v::max(32),
+            "website" => v::max(100)->url()
         ]);
         if ($validation->passed()) {
             $this->user()->update([
                 "forename" => $this->param("forename"),
-                "surname" => $this->param("surname")
+                "biography" => $this->param("biography"),
+                "location" => $this->param("location"),
+                "surname" => $this->param("surname"),
+                "website" => $this->param("website")
             ]);
             $this->flash("success", $this->text("user/profile_updated"));
         }

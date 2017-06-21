@@ -20,14 +20,17 @@ class User extends Model {
     protected $fillable = [
         "activated",
         "activation_code",
+        "biography",
         "email",
         "forename",
+        "location",
         "password",
         "remember_token",
         "remember_identifier",
         "salt",
         "surname",
-        "username"
+        "username",
+        "website"
     ];
 
     /**

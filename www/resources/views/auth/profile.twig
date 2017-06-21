@@ -18,6 +18,27 @@
                         <span class="help-block">{{ errors.surname | first }}</span>
                     {% endif %}
                 </div>
+                <div class="form-group{{ errors.biography ? ' has-error' : '' }}">
+                    <label for="biography-input" class="control-label">Biography</label>
+                    <textarea id="biography-input" class="form-control" name="biography">{{ input.biography ? input.biography : auth.user.biography }}</textarea>
+                    {% if errors.biography %}
+                        <span class="help-block">{{ errors.biography | first }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group{{ errors.location ? ' has-error' : '' }}">
+                    <label for="location-input" class="control-label">Location</label>
+                    <input type="text" id="location-input" class="form-control" name="location" value="{{ input.location ? input.location : auth.user.location }}" />
+                    {% if errors.location %}
+                        <span class="help-block">{{ errors.location | first }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group{{ errors.website ? ' has-error' : '' }}">
+                    <label for="website-input" class="control-label">Website</label>
+                    <input type="text" id="website-input" class="form-control" name="website" value="{{ input.website ? input.website : auth.user.website }}" />
+                    {% if errors.website %}
+                        <span class="help-block">{{ errors.website | first }}</span>
+                    {% endif %}
+                </div>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
                 {{ csrf_token() | raw }}
             </form>
