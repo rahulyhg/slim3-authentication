@@ -1,28 +1,32 @@
 <?php
 
-use App\Controller\Auth;
-use App\Controller\Index;
-use App\Controller\Profile;
-use App\Middleware\RestirctAuth;
-use App\Middleware\RestirctGuests;
+use App\Middleware;
+
+$App->route(["GET"], "/", App\Controller\Index::class, "index")->setName("index");
 
 // Authenticated only routes
 $App->group("", function () {
-    
-    // Get requests
-    $this->get("/", Index::class . ":getIndex")->setName("index");
-    $this->get("/logout", Auth::class . ":getLogout")->setName("auth.logout");
-    $this->get("/profile/{username}", Profile::class . ":getProfile")->setName("profile");
-})->add(new RestirctGuests($container));
+    $this->route(["GET"], "/logout", App\Controller\Auth\Logout::class)->setName("auth.logout");
+    $this->route(["GET"], "/profile/{username}", App\Controller\Profile::class, "profile")->setName("profile");
+})->add(new Middleware\RestirctGuests($container));
+
+// Authenticated only routes
+$App->group("/settings", function () {
+    $this->route(["GET", "POST"], "/account", App\Controller\Auth\Settings::class, "account")->setName("auth.account");
+    $this->route(["GET", "POST"], "/password", App\Controller\Auth\Settings::class, "password")->setName("auth.password");
+    $this->route(["GET", "POST"], "/profile", App\Controller\Auth\Settings::class, "profile")->setName("auth.profile");
+})->add(new Middleware\RestirctGuests($container));
+
+// Admin only routes
+$App->group("/admin", function() {
+    $this->route(["GET", "POST"], "/users/create[/]", App\Controller\Admin\Users::class, "create")->setName("admin.users.create");
+    $this->route(["GET", "POST"], "/users/{userId}/update[/]", App\Controller\Admin\Users::class, "update")->setName("admin.users.update");
+    $this->route(["GET", "POST"], "/users/{userId}/delete[/]", App\Controller\Admin\Users::class, "delete")->setName("admin.users.delete");
+})->add(new Middleware\RestrictNonAdmin($container));
 
 // Unauthenticated only routes
 $App->group("", function () {
-    
-    // Get requests
-    $this->get("/login", Auth::class . ":getLogin")->setName("auth.login");
-    $this->get("/register", Auth::class . ":getRegister")->setName("auth.register");
-    
-    // Post requets
-    $this->post("/login", Auth::class . ":postLogin");
-    $this->post("/register", Auth::class . ":postRegister");
-})->add(new RestirctAuth($container));
+    $this->route(["GET", "POST"], "/login", App\Controller\Auth\Login::class)->setName("auth.login");
+    $this->route(["GET", "POST"], "/register", App\Controller\Auth\Register::class)->setName("auth.register");
+})->add(new Middleware\RestirctAuth($container));
+

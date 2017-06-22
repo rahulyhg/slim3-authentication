@@ -2,11 +2,20 @@
 {% block title %}Index{% endblock %}
 {% block content %}
     <div class="jumbotron">
-        <h1>Hello, {{ auth.user.forename }}!</h1>
-        <p>...</p>
-        <p>
-            <a class="btn btn-default btn-lg" href="{{ path_for('profile', {username: auth.user.username}) }}" role="button">Profile</a>
-            <a class="btn btn-primary btn-lg" href="{{ path_for('auth.logout') }}" role="button">Logout</a>
-        </p>
+        {% if(auth.check) %}
+            <h1>Hello, {{ auth.user.forename }}!</h1>
+            <p>...</p>
+            <p>
+                <a class="btn btn-default btn-lg" href="{{ path_for('profile', {username: auth.user.username}) }}" role="button">Profile</a>
+                <a class="btn btn-primary btn-lg" href="{{ path_for('auth.logout') }}" role="button">Logout</a>
+            </p>
+        {% else %}
+            <h1>Hello!</h1>
+            <p>...</p>
+            <p>
+                <a class="btn btn-default btn-lg" href="{{ path_for('auth.login') }}" role="button">Login</a>
+                <a class="btn btn-primary btn-lg" href="{{ path_for('auth.register') }}" role="button">Register</a>
+            </p>
+        {% endif %}
     </div>
 {% endblock %}

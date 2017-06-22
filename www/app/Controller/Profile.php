@@ -13,12 +13,12 @@ class Profile extends Controller {
     /**
      * 
      */
-    public function getProfile($request, $response, $args) {
-        $user = User::where("username", $args["username"])->first();
+    public function getProfile($username) {
+        $user = User::where("username", $username)->first();
         if (!$user) {
-            return($response->withRedirect($this->router->pathFor("index")));
+            return($this->redirect("index"));
         }
-        return($this->container->view->render($response, "profile/profile.twig", ["user" => $user]));
+        return($this->render("profile/profile.twig", ["user" => $user]));
     }
 
 }

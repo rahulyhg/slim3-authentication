@@ -2,27 +2,45 @@
 
 namespace App\Validation;
 
-use App\Utility\Session;
+use App\Utility;
 use Respect\Validation\Exceptions\NestedValidationException;
 
+/**
+ * 
+ */
 class Validator {
 
-    protected $errors;
+    /** @var type */
+    private $_errors = [];
 
+    /**
+     * 
+     */
     public function validate($request, array $rules) {
         foreach ($rules as $field => $rule) {
             try {
-                $rule->setName(ucfirst($field))->assert($request->getParam($field));
+                $name = str_replace(["-", "_"], " ", ucfirst(strtolower($field)));
+                $rule->setName($name)->assert($request->getParam($field));
             } catch (NestedValidationException $ex) {
-                $this->errors[$field] = $ex->getMessages();
+                $this->_errors[$field] = $ex->getMessages();
             }
         }
-        Session::put("errors", $this->errors);
+        Utility\Session::put("errors", $this->_errors);
         return $this;
     }
 
+    /**
+     * 
+     */
+    public function errors() {
+        return($this->_errors);
+    }
+
+    /**
+     * 
+     */
     public function passed() {
-        return(empty($this->errors));
+        return(empty($this->_errors));
     }
 
 }
