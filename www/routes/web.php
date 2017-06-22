@@ -28,5 +28,7 @@ $App->group("/admin", function() {
 $App->group("", function () {
     $this->route(["GET", "POST"], "/login", App\Controller\Auth\Login::class)->setName("auth.login");
     $this->route(["GET", "POST"], "/register", App\Controller\Auth\Register::class)->setName("auth.register");
+    $this->route(["GET", "POST"], "/password/forgot", App\Controller\Auth\Password::class, "forgot")->setName("auth.password.forgot");
+    $this->route(["GET", "POST"], "/password/reset", App\Controller\Auth\Password::class, "reset")->setName("auth.password.reset");
 })->add(new Middleware\RestirctAuth($container));
 
