@@ -1,0 +1,40 @@
+{% extends "template.twig" %}
+{% block title %}Reset Your Password{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Reset Your Password</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="{{ path_for("auth.password.reset") }}?recover_hash={{recover_hash}}" method="post">
+                        <div class="form-group{{ errors.email_or_username ? ' has-error' : '' }}">
+                            <label for="email-or-username-input" class="control-label">Email or Username <span class="text-danger">*</span></label>
+                            <input type="text" id="email-or-username-input" class="form-control" name="email_or_username" value="{{ input.email_or_username }}" />
+                            {% if errors.email_or_username %}
+                                <span class="help-block">{{ errors.email_or_username | first }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group{{ errors.new_password ? ' has-error' : '' }}">
+                            <label for="new-password-input" class="control-label">New Password <span class="text-danger">*</span></label>
+                            <input type="password" id="new-password-input" class="form-control" name="new_password" />
+                            {% if errors.new_password %}
+                                <span class="help-block">{{ errors.new_password | first }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group{{ errors.new_password_repeat ? ' has-error' : '' }}">
+                            <label for="new-password-repeat-input" class="control-label">New Password Repeat <span class="text-danger">*</span></label>
+                            <input type="password" id="new-password-repeat-input" class="form-control" name="new_password_repeat" />
+                            {% if errors.new_password_repeat %}
+                                <span class="help-block">{{ errors.new_password_repeat | first }}</span>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                        {{ csrf_token() | raw }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "template.twig" %}
+{% block title %}Account Settings{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <form action="{{ path_for("auth.account") }}" method="post" name="account">
+                <div class="form-group{{ errors.username ? ' has-error' : '' }}">
+                    <label for="username-input" class="control-label">Username <span class="text-danger">*</span></label>
+                    <input type="text" id="username-input" class="form-control" name="username" value="{{ input.username ? input.username : auth.user.username }}" />
+                    {% if errors.username %}
+                        <span class="help-block">{{ errors.username | first }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group{{ errors.email ? ' has-error' : '' }}">
+                    <label for="email-input" class="control-label">Email <span class="text-danger">*</span></label>
+                    <input type="text" id="email-input" class="form-control" name="email" value="{{ input.email ? input.email : auth.user.email }}" />
+                    {% if errors.email %}
+                        <span class="help-block">{{ errors.email | first }}</span>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                {{ csrf_token() | raw }}
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+{% endblock %}
