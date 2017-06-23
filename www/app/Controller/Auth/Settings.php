@@ -9,15 +9,15 @@ use Respect\Validation\Validator as v;
 class Settings extends Controller {
 
     public function getAccount() {
-        return($this->render("auth/account.twig"));
+        return($this->render("auth/settings/account.twig"));
     }
 
     public function getPassword() {
-        return($this->render("auth/password.twig"));
+        return($this->render("auth/settings/password.twig"));
     }
 
     public function getProfile() {
-        return($this->render("auth/profile.twig"));
+        return($this->render("auth/settings/profile.twig"));
     }
 
     public function postAccount() {

@@ -19,9 +19,9 @@ $App->group("/settings", function () {
 
 // Admin only routes
 $App->group("/admin", function() {
-    $this->route(["GET", "POST"], "/users/create[/]", App\Controller\Admin\Users::class, "create")->setName("admin.users.create");
-    $this->route(["GET", "POST"], "/users/{userId}/update[/]", App\Controller\Admin\Users::class, "update")->setName("admin.users.update");
-    $this->route(["GET", "POST"], "/users/{userId}/delete[/]", App\Controller\Admin\Users::class, "delete")->setName("admin.users.delete");
+    $this->route(["GET", "POST"], "/users/create", App\Controller\Admin\Users::class, "create")->setName("admin.users.create");
+    $this->route(["GET", "POST"], "/users/{userId}/update", App\Controller\Admin\Users::class, "update")->setName("admin.users.update");
+    $this->route(["GET", "POST"], "/users/{userId}/delete", App\Controller\Admin\Users::class, "delete")->setName("admin.users.delete");
 })->add(new Middleware\RestrictNonAdmin($container));
 
 // Unauthenticated only routes

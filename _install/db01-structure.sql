@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `forename` VARCHAR(100) NOT NULL,
     `location` VARCHAR(32) DEFAULT NULL,
     `password` TEXT NOT NULL,
+    `recover_hash` VARCHAR(255) DEFAULT NULL,
     `remember_token` VARCHAR(255) DEFAULT NULL,
     `remember_identifier` VARCHAR(255) DEFAULT NULL,
     `salt` TEXT NOT NULL,

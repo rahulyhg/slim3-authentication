@@ -25,6 +25,7 @@ class User extends Model {
         "forename",
         "location",
         "password",
+        "recover_hash",
         "remember_token",
         "remember_identifier",
         "salt",
