@@ -3,7 +3,6 @@
 namespace App\Controller\Auth;
 
 use App\Core\Controller;
-use App\Utility\Hash;
 use Respect\Validation\Validator as v;
 
 class Settings extends Controller {
@@ -42,12 +41,12 @@ class Settings extends Controller {
             "new_password_repeat" => v::max(8)->notEmpty()->noWhitespace()->identical($this->param("new_password"))
         ]);
         if ($validation->passed()) {
-            if ($this->user()->password !== Hash::generate($this->param("current_password"), $this->user()->salt)) {
+            if ($this->hash()->passwordVerify($this->user()->password, $this->param("current_password"), $this->user()->salt)) {
                 $this->flash("danger", $this->text("user/password_invalid"));
             } else {
                 $this->user()->update([
-                    "salt" => ($salt = Hash::generateSalt(32)),
-                    "password" => Hash::generate($this->param("new_password"), $salt)
+                    "salt" => ($salt = $this->hash()->salt(32)),
+                    "password" => $this->hash()->generate($this->param("new_password"), $salt)
                 ]);
                 $this->flash("success", $this->text("user/password_updated"));
             }

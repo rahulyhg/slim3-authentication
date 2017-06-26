@@ -50,6 +50,12 @@ return [
     "flash" => function() {
         return(new Slim\Flash\Messages);
     },
+    //
+    // Hash
+    // -------------------------------------------------------------------------
+    "hash" => function() {
+        return(new App\Core\Hash);
+    },
     // 
     // Validator
     // -------------------------------------------------------------------------

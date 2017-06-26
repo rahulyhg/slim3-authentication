@@ -5,7 +5,6 @@ namespace App\Controller\Auth;
 use App\Core\Controller;
 use App\Model\User;
 use App\Utility\Cookie;
-use App\Utility\Hash;
 use App\Utility\Session;
 use Respect\Validation\Validator as v;
 
@@ -23,7 +22,7 @@ class Login extends Controller {
         if ($validation->passed()) {
             $emailOrUsername = $this->param("email_or_username");
             $user = User::where("email", $emailOrUsername)->orWhere("username", $emailOrUsername)->first();
-            if (!$user or $user->password !== Hash::generate($this->param("password"), $user->salt)) {
+            if (!$user or !$this->hash()->passwordVerify($user->password, $this->param("password"), $user->salt)) {
                 $this->flash("danger", $this->text(""));
             } elseif ($user and ! $user->activated) {
                 $this->flash("warning", $this->text(""));
@@ -38,9 +37,9 @@ class Login extends Controller {
 
     private function remember($user, $remember) {
         if ($remember) {
-            $identifier = Hash::generateSalt(128);
-            $token = Hash::generateSalt(128);
-            $user->updateRememberCredentials($identifier, Hash::generate($token));
+            $identifier = $this->hash()->salt(128);
+            $token = $this->hash()->salt(128);
+            $user->updateRememberCredentials($identifier, $this->hash()->generate($token));
             Cookie::put($this->config("cookies/user_remember"), "{$identifier}.{$token}", 604800);
         }
     }

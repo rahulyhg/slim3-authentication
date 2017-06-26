@@ -14,7 +14,7 @@ Session::init();
 define("ROOT", realpath(dirname(__FILE__) . "/../") . "/");
 
 // App
-$App = new App(new Container(require_once ROOT . "bootstrap/container.php"));
+$App = new App(new Container(require_once ROOT . "app/container.php"));
 
 // Container
 $container = $App->getContainer();

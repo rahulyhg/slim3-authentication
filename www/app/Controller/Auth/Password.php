@@ -4,7 +4,6 @@ namespace App\Controller\Auth;
 
 use App\Core\Controller;
 use App\Model\User;
-use App\Utility\Hash;
 use Respect\Validation\Validator as v;
 
 class Password extends Controller {
@@ -31,7 +30,7 @@ class Password extends Controller {
             $emailOrUsername = $this->param("email_or_username");
             $user = User::where("email", $emailOrUsername)->orWhere("username", $emailOrUsername)->first();
             if ($user) {
-                $recoverHash = Hash::generateUnique();
+                $recoverHash = $this->hash()->unique();
                 $user->update([
                     "recover_hash" => $recoverHash,
                 ]);
@@ -65,8 +64,8 @@ class Password extends Controller {
                 
                 $user->update([
                     "recover_hash" => "",
-                    "salt" => ($salt = Hash::generateSalt(32)),
-                    "password" => Hash::generate($this->param("password"), $salt)
+                    "salt" => ($salt = $this->hash()->salt(32)),
+                    "password" => $this->hash()->generate($this->param("password"), $salt)
                 ]);
                                 $this->flash("success", $this->text(""));
                 return($this->redirect("auth.login"));

@@ -41,6 +41,13 @@ abstract class Middleware {
     /**
      * 
      */
+    protected function hash(){
+        return($this->container->hash);
+    }
+    
+    /**
+     * 
+     */
     protected function test($name, $value) {
         return($this->container->view->getEnvironment()->addGlobal($name, $value));
     }

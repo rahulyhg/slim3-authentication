@@ -4,7 +4,6 @@ namespace App\Controller\Auth;
 
 use App\Core\Controller;
 use App\Model\User;
-use App\Utility\Hash;
 use Respect\Validation\Validator as v;
 
 class Register extends Controller {
@@ -24,11 +23,11 @@ class Register extends Controller {
         ]);
         if ($validation->passed()) {
             $user = User::create([
-                "activation_code" => ($activationCode = Hash::generateUnique()),
-                "salt" => ($salt = Hash::generateSalt(32)),
+                "activation_code" => ($activationCode = $this->hash()->unique()),
+                "salt" => ($salt = $this->hash()->salt(32)),
                 "email" => $this->param("email"),
                 "forename" => $this->param("forename"),
-                "password" => Hash::generate($this->param("password"), $salt),
+                "password" => $this->hash()->generate($this->param("password"), $salt),
                 "surname" => $this->param("surname"),
                 "username" => $this->param("username")
             ]);

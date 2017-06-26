@@ -49,6 +49,13 @@ abstract class Controller {
     /**
      * 
      */
+    protected function hash(){
+        return($this->container->hash);
+    }
+    
+    /**
+     * 
+     */
     protected function param($key, $default = null) {
         return($this->request->getParam($key, $default));
     }

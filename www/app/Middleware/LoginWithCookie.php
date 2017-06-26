@@ -4,9 +4,7 @@ namespace App\Middleware;
 
 use App\Core\Middleware;
 use App\Model\User;
-use App\Model\UserCookie;
 use App\Utility\Cookie;
-use App\Utility\Hash;
 use App\Utility\Session;
 
 /**
@@ -29,7 +27,7 @@ class LoginWithCookie extends Middleware {
             $rememberIdentifier = $credentials[0];
             $user = User::where("remember_identifier", $rememberIdentifier)->first();
             if ($user) {
-                $rememberToken = Hash::generate($credentials[1]);
+                $rememberToken = $this->hash()->generate($credentials[1]);
                 if ($rememberToken === $user->remember_token) {
                     Session::put($this->config("sessions/user_id"), $user->id);
                 } else {
