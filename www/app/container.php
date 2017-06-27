@@ -40,9 +40,26 @@ return [
     // -------------------------------------------------------------------------
     "db" => function($container){
         $capsule = new Illuminate\Database\Capsule\Manager;
-        $capsule->addConnection($container->config->get("database"));
+        $capsule->addConnection($container["config"]->get("database"));
         $capsule->setAsGlobal();
         return $capsule;
+    },
+    //
+    // Email
+    // -------------------------------------------------------------------------
+    "email" => function($container){
+        $mailer = new \PHPMailer;
+        $mailer->isSMTP();
+        $mailer->Host = $container["config"]->get("email/host");
+        $mailer->Port = $container["config"]->get("email/port");
+        $mailer->Username = $container["config"]->get("email/username");
+        $mailer->Password = $container["config"]->get("email/password");
+        $mailer->SMTPAuth = true;
+        $mailer->SMTPSecure = false;
+        $mailer->FromName = $container["config"]->get("email/name");
+        $mailer->From = $container["config"]->get("email/from");
+        $mailer->isHTML(true);
+        return(new App\Mail\Mailer($mailer, $container));
     },
     //
     // Flash

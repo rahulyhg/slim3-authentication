@@ -8,10 +8,14 @@ use App\Middleware\OldInput;
 use App\Middleware\ValidationErrors;
 
 require_once "../../vendor/autoload.php";
-
 Session::init();
 
 define("ROOT", realpath(dirname(__FILE__) . "/../") . "/");
+
+if(file_exists(ROOT . '../.env')) {
+    $env = new Dotenv\Dotenv(ROOT . '../');
+    $env->load();
+}
 
 // App
 $App = new App(new Container(require_once ROOT . "app/container.php"));

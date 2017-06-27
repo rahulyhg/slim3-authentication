@@ -10,6 +10,8 @@
         "illuminate/database": "^5.2",
         "respect/validation": "^1.1",
         "slim/flash": "^0.2.0",
-        "slim/csrf": "^0.8.1"
+        "slim/csrf": "^0.8.1",
+        "phpmailer/phpmailer": "^5.2",
+        "vlucas/phpdotenv": "^2.3"
     }
 }
