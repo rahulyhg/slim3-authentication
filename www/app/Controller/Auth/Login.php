@@ -23,9 +23,9 @@ class Login extends Controller {
             $emailOrUsername = $this->param("email_or_username");
             $user = User::where("email", $emailOrUsername)->orWhere("username", $emailOrUsername)->first();
             if (!$user or !$this->hash()->passwordVerify($user->password, $this->param("password"), $user->salt)) {
-                $this->flash("danger", $this->text(""));
+                $this->flash("danger", $this->text("login/invalid"));
             } elseif ($user and ! $user->activated) {
-                $this->flash("warning", $this->text(""));
+                $this->flash("warning", $this->text("login/not_activated"));
             } elseif($user) {
                 Session::put($this->config("sessions/user_id"), $user->id);
                 $this->remember($user, ($this->param("remember") === "on"));

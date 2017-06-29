@@ -11,7 +11,7 @@ class RestirctGuests extends Middleware {
             $response = $next($request, $response);
             return $response;
         }
-        $this->flash("danger", $this->text(""));
+        $this->flash("danger", $this->text("requires_auth"));
         return($this->redirect($response, "auth.login"));
     }
 

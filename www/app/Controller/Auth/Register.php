@@ -33,13 +33,13 @@ class Register extends Controller {
             ]);
             if ($this->config("app/activation")) {
                 // send email
-                $this->flash("info", $this->text(""));
+                $this->flash("info", $this->text("register/requires_mail_activation"));
             } else {
                 $user->update([
                     "activated" => true,
                     "activation_code" => ""
                 ]);
-                $this->flash("success", $this->text(""));
+                $this->flash("success", $this->text("register/success"));
             }
             return($this->redirect("auth.login"));
         }

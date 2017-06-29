@@ -2,11 +2,14 @@
 
 return [
     "texts" => [
+        "requires_auth" => "You must be logged in to access that page.",
         "login" => [
-            "invalid" => "The login credentials you have supplied are invalid."
+            "invalid" => "The login credentials you have supplied are invalid.",
+            "not_activated" => "The account you are trying to access has not been activated."
         ],
         "register" => [
             "error" => "There was a problem creating your account! Please fix any errors and try again.",
+            "requires_mail_activation" => "Your account has been created but you will need to activate it. Please check your e-mail for instructions.",
             "success" => "Your account has been successfully created!"
         ],
         "user" => [

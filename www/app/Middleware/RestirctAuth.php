@@ -11,7 +11,6 @@ class RestirctAuth extends Middleware {
             $response = $next($request, $response);
             return $response;
         }
-        $this->flash("danger", $this->text(""));
         return($this->redirect($response, "index"));
     }
 
