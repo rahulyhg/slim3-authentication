@@ -21,6 +21,11 @@
                         <a class="navbar-brand" href="{{ path_for("index") }}">myApp</a>
                     </div>
                     <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                        {% if auth.check and auth.user.isAdmin() %}
+                         <ul class="nav navbar-nav navbar-left">
+                             <li><a href="#"><i class="fa fa-users"></i>&nbsp; Users</a></li>
+                         </ul>
+                        {% endif %}
                         <ul class="nav navbar-nav navbar-right">
                             {% if auth.check %}
                                 <li><a href="{{ path_for('profile', {username: auth.user.username}) }}"><i class="fa fa-fw fa-user"></i>&nbsp; {{auth.user.forename}}</a></li>
@@ -33,10 +38,10 @@
                                     </ul>
                                 </li>
                                 <li><a href="{{ path_for("auth.logout") }}"><i class="fa fa-fw fa-sign-out"></i>&nbsp; Logout</a></li>
-                                {% else %}
+                            {% else %}
                                 <li><a href="{{ path_for("auth.login") }}">Login</a></li>
                                 <li><a href="{{ path_for("auth.register") }}">Register</a></li>
-                                {% endif %}
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

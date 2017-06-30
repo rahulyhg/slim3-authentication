@@ -25,13 +25,9 @@ INSERT INTO `role_permissions` (`id`, `role_id`, `permission_id`) VALUES
     (2, 1, 2),
     (3, 1, 3),
     (4, 1, 4),
-    (5, 2, 1),
-    (6, 2, 2),
-    (7, 2, 3),
-    (8, 2, 4),
-    (9, 2, 5),
-    (10, 2, 6),
-    (11, 2, 7);
+    (5, 2, 5),
+    (6, 2, 6),
+    (7, 2, 7);
 
 --
 -- Inserts for table 'users'
@@ -43,4 +39,5 @@ INSERT INTO `users` (`id`, `activated`, `email`, `forename`, `password`, `salt`,
 -- Inserts for table 'user_roles'
 --
 INSERT INTO `user_roles` (`id`, `role_id`, `user_id`) VALUES
-    (1, 2, 1);
+    (1, 1, 1),
+    (2, 2, 1);
