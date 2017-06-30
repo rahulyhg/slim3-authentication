@@ -36,4 +36,5 @@ $App->add($container->csrf);
 Respect\Validation\Validator::with("App\\Validation\\Rules\\");
 
 // Routes
+require_once ROOT . "routes/api.php";
 require_once ROOT . "routes/web.php";

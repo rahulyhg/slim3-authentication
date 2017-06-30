@@ -43,5 +43,9 @@ class Login extends Controller {
             Cookie::put($this->config("cookies.user_remember"), "{$identifier}.{$token}", 604800);
         }
     }
+    
+    public function getTest(){
+        return(json_encode(["test" => "test"]));
+    }
 
 }
