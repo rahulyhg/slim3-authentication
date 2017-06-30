@@ -29,7 +29,7 @@ class Settings extends Controller {
                 "username" => $this->param("username"),
                 "email" => $this->param("email")
             ]);
-            $this->flash("success", $this->text("user/account_updated"));
+            $this->flash("success", $this->text("user.account_updated"));
         }
         return($this->redirect("auth.account"));
     }
@@ -42,13 +42,13 @@ class Settings extends Controller {
         ]);
         if ($validation->passed()) {
             if ($this->hash()->passwordVerify($this->user()->password, $this->param("current_password"), $this->user()->salt)) {
-                $this->flash("danger", $this->text("user/password_invalid"));
+                $this->flash("danger", $this->text("user.password_invalid"));
             } else {
                 $this->user()->update([
                     "salt" => ($salt = $this->hash()->salt(32)),
-                    "password" => $this->hash()->generate($this->param("new_password"), $salt)
+                    "password" => $this->hash()->generate($this->param("new_password") . $salt)
                 ]);
-                $this->flash("success", $this->text("user/password_updated"));
+                $this->flash("success", $this->text("user.password_updated"));
             }
         }
         return($this->redirect("auth.password"));
@@ -70,7 +70,7 @@ class Settings extends Controller {
                 "surname" => $this->param("surname"),
                 "website" => $this->param("website")
             ]);
-            $this->flash("success", $this->text("user/profile_updated"));
+            $this->flash("success", $this->text("user.profile_updated"));
         }
         return($this->redirect("auth.profile"));
     }

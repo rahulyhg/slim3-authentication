@@ -6,6 +6,7 @@ use App\Utility\Session;
 use App\Middleware\LoginWithCookie;
 use App\Middleware\OldInput;
 use App\Middleware\ValidationErrors;
+use App\Middleware\CsrfView;
 
 require_once "../../vendor/autoload.php";
 Session::init();
@@ -18,7 +19,7 @@ if(file_exists(ROOT . '../.env')) {
 }
 
 // App
-$App = new App(new Container(require_once ROOT . "app/container.php"));
+$App = new App(new Container(require_once "container.php"));
 
 // Container
 $container = $App->getContainer();
@@ -28,6 +29,7 @@ $container["db"]->bootEloquent();
 $App->add(new LoginWithCookie($container));
 $App->add(new OldInput($container));
 $App->add(new ValidationErrors($container));
+$App->add(new CsrfView($container));
 $App->add($container->csrf);
 
 // 

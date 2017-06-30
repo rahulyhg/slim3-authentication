@@ -16,7 +16,7 @@ class LoginWithCookie extends Middleware {
      * 
      */
     public function handle($request, $response, $next) {
-        $key = $this->config("cookies/user_remember");
+        $key = $this->config("cookies.user_remember");
         if (Cookie::exists($key) and ! $this->auth()->check()) {
             $hash = Cookie::get($key);
             $credentials = explode(".", $hash);
@@ -29,7 +29,7 @@ class LoginWithCookie extends Middleware {
             if ($user) {
                 $rememberToken = $this->hash()->generate($credentials[1]);
                 if ($rememberToken === $user->remember_token) {
-                    Session::put($this->config("sessions/user_id"), $user->id);
+                    Session::put($this->config("sessions.user_id"), $user->id);
                 } else {
                     $user->removeRememberCredentials();
                 }

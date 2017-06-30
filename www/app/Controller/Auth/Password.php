@@ -32,7 +32,7 @@ class Password extends Controller {
                     "recover_hash" => ($recoverHash = $this->hash()->unique()),
                 ]);
             }
-            $this->flash("success", $this->text("user/forgot_password_success"));
+            $this->flash("success", $this->text("user.forgot_password_success"));
             return($this->redirect("auth.login"));
         }
         return($this->redirect("auth.password.forgot"));
@@ -54,15 +54,15 @@ class Password extends Controller {
                     $user->update([
                         "recover_hash" => "",
                         "salt" => ($salt = $this->hash()->salt(32)),
-                        "password" => $this->hash()->generate($this->param("new_password"), $salt)
+                        "password" => $this->hash()->generate($this->param("new_password") . $salt)
                     ]);
-                    $this->flash("success", $this->text("user/reset_password_success"));
+                    $this->flash("success", $this->text("user.reset_password_success"));
                     return($this->redirect("auth.login"));
                 }
                 $user->update([
                     "recover_hash" => ""
                 ]);
-                $this->flash("danger", $this->text("user/reset_password_failed"));
+                $this->flash("danger", $this->text("user.reset_password_failed"));
             }
         }
         return($this->redirect("auth.password.forgot"));

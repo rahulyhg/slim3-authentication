@@ -27,19 +27,19 @@ class Register extends Controller {
                 "salt" => ($salt = $this->hash()->salt(32)),
                 "email" => $this->param("email"),
                 "forename" => $this->param("forename"),
-                "password" => $this->hash()->generate($this->param("password"), $salt),
+                "password" => $this->hash()->generate($this->param("password") . $salt),
                 "surname" => $this->param("surname"),
                 "username" => $this->param("username")
             ]);
-            if ($this->config("app/activation")) {
+            if ($this->config("app.activation")) {
                 // send email
-                $this->flash("info", $this->text("register/requires_mail_activation"));
+                $this->flash("info", $this->text("register.requires_mail_activation"));
             } else {
                 $user->update([
                     "activated" => true,
                     "activation_code" => ""
                 ]);
-                $this->flash("success", $this->text("register/success"));
+                $this->flash("success", $this->text("register.success"));
             }
             return($this->redirect("auth.login"));
         }

@@ -10,7 +10,7 @@ class Logout extends Controller {
     
     public function get(){
         Session::destroy();
-        $key = $this->config("cookies/user_remember");
+        $key = $this->config("cookies.user_remember");
         if (Cookie::exists($key)) {
             $user = $this->auth()->user();
             if ($user->removeRememberCredentials()) {

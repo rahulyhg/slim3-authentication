@@ -4,8 +4,8 @@ namespace App\Core;
 
 class Hash {
 
-    public function generate($string, $salt = "") {
-        return(hash("sha256", $string . $salt));
+    public function generate($string) {
+        return(hash("sha256", $string));
     }
 
     public function salt($length = 64) {
@@ -22,7 +22,7 @@ class Hash {
     }
 
     public function passwordVerify($knownHash, $password, $salt) {
-        return($knownHash === $this->generate($password, $salt));
+        return($knownHash === $this->generate($password . $salt));
     }
 
 }

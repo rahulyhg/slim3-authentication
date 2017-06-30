@@ -78,7 +78,7 @@ abstract class Controller {
      * 
      */
     protected function text($key) {
-        return($this->config("texts/{$key}"));
+        return($this->config("texts.{$key}"));
     }
 
     /**
