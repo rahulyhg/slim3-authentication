@@ -4,48 +4,89 @@
     <div class="row">
         <div class="col-md-9">
             <form action="{{ path_for("admin.users.create") }}" method="post" name="create">
-                <div class="form-group{{ errors.forename ? ' has-error' : '' }}">
-                    <label for="forename-input" class="control-label">Forename <span class="text-danger">*</span></label>
-                    <input type="text" id="forename-input" class="form-control" name="forename" value="{{ input.forename }}" />
-                    {% if errors.forename %}
-                        <span class="help-block">{{ errors.forename | first }}</span>
-                    {% endif %}
-                </div>
-                <div class="form-group{{ errors.surname ? ' has-error' : '' }}">
-                    <label for="surname-input" class="control-label">Surname <span class="text-danger">*</span></label>
-                    <input type="text" id="surname-input" class="form-control" name="surname" value="{{ input.surname }}" />
-                    {% if errors.surname %}
-                        <span class="help-block">{{ errors.surname | first }}</span>
-                    {% endif %}
-                </div>
-                <div class="form-group{{ errors.username ? ' has-error' : '' }}">
-                    <label for="username-input" class="control-label">Username <span class="text-danger">*</span></label>
-                    <input type="text" id="username-input" class="form-control" name="username" value="{{ input.username }}" />
-                    {% if errors.username %}
-                        <span class="help-block">{{ errors.username | first }}</span>
-                    {% endif %}
-                </div>
-                <div class="form-group{{ errors.email ? ' has-error' : '' }}">
-                    <label for="email-input" class="control-label">Email <span class="text-danger">*</span></label>
-                    <input type="text" id="email-input" class="form-control" name="email" value="{{ input.email }}" />
-                    {% if errors.email %}
-                        <span class="help-block">{{ errors.email | first }}</span>
-                    {% endif %}
-                </div>
-                <div class="form-group{{ errors.password ? ' has-error' : '' }}">
-                    <label for="password-input" class="control-label">Password <span class="text-danger">*</span></label>
-                    <input type="password" id="password-input" class="form-control" name="password" />
-                    {% if errors.password %}
-                        <span class="help-block">{{ errors.password | first }}</span>
-                    {% endif %}
-                </div>
-                <div class="form-group{{ errors.password_repeat ? ' has-error' : '' }}">
-                    <label for="password-repeat-input" class="control-label">Password Repeat <span class="text-danger">*</span></label>
-                    <input type="password" id="password-repeat-input" class="form-control" name="password_repeat" />
-                    {% if errors.password_repeat %}
-                        <span class="help-block">{{ errors.password_repeat | first }}</span>
-                    {% endif %}
-                </div>
+                <fieldset>
+                    <legend>Account Settings</legend>
+                    <div class="form-group{{ errors.username ? ' has-error' : '' }}">
+                        <label for="username-input" class="control-label">Username <span class="text-danger">*</span></label>
+                        <input type="text" id="username-input" class="form-control" name="username" value="{{ input.username }}" autocomplete="off" />
+                        {% if errors.username %}
+                            <span class="help-block">{{ errors.username | first }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group{{ errors.email ? ' has-error' : '' }}">
+                        <label for="email-input" class="control-label">Email <span class="text-danger">*</span></label>
+                        <input type="text" id="email-input" class="form-control" name="email" value="{{ input.email }}" autocomplete="off" />
+                        {% if errors.email %}
+                            <span class="help-block">{{ errors.email | first }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group{{ errors.activated ? ' has-error' : '' }}">
+                        <label for="activated-input" class="control-label">Activated <span class="text-danger">*</span></label>
+                        <select id="activated-input" class="form-control" name="activated" autocomplete="off">
+                            <option></option>
+                            <option value="false" {{ input.activated == "false" ? 'selected="selected"' : '' }}>No</option>
+                            <option value="true" {{ input.activated == "true" ? 'selected="selected"' : '' }}>Yes</option>
+                        </select>
+                        {% if errors.activated %}
+                            <span class="help-block">{{ errors.activated | first }}</span>
+                        {% endif %}
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Password Settings</legend>
+                    <div class="form-group{{ errors.password ? ' has-error' : '' }}">
+                        <label for="password-input" class="control-label">Password <span class="text-danger">*</span></label>
+                        <input type="password" id="password-input" class="form-control" name="password" autocomplete="off" />
+                        {% if errors.password %}
+                            <span class="help-block">{{ errors.password | first }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group{{ errors.password_repeat ? ' has-error' : '' }}">
+                        <label for="password-repeat-input" class="control-label">Password Repeat <span class="text-danger">*</span></label>
+                        <input type="password" id="password-repeat-input" class="form-control" name="password_repeat" autocomplete="off" />
+                        {% if errors.password_repeat %}
+                            <span class="help-block">{{ errors.password_repeat | first }}</span>
+                        {% endif %}
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Profile Settings</legend>
+                    <div class="form-group{{ errors.forename ? ' has-error' : '' }}">
+                        <label for="forename-input" class="control-label">Forename <span class="text-danger">*</span></label>
+                        <input type="text" id="forename-input" class="form-control" name="forename" value="{{ input.forename }}" autocomplete="off" />
+                        {% if errors.forename %}
+                            <span class="help-block">{{ errors.forename | first }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group{{ errors.surname ? ' has-error' : '' }}">
+                        <label for="surname-input" class="control-label">Surname <span class="text-danger">*</span></label>
+                        <input type="text" id="surname-input" class="form-control" name="surname" value="{{ input.surname }}" autocomplete="off" />
+                        {% if errors.surname %}
+                            <span class="help-block">{{ errors.surname | first }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group{{ errors.biography ? ' has-error' : '' }}">
+                        <label for="biography-input" class="control-label">Biography</label>
+                        <textarea id="biography-input" class="form-control" name="biography" autocomplete="off">{{ input.biography }}</textarea>
+                        {% if errors.biography %}
+                            <span class="help-block">{{ errors.biography | first }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group{{ errors.location ? ' has-error' : '' }}">
+                        <label for="location-input" class="control-label">Location</label>
+                        <input type="text" id="location-input" class="form-control" name="location" value="{{ input.location }}" autocomplete="off" />
+                        {% if errors.location %}
+                            <span class="help-block">{{ errors.location | first }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group{{ errors.website ? ' has-error' : '' }}">
+                        <label for="website-input" class="control-label">Website</label>
+                        <input type="text" id="website-input" class="form-control" name="website" value="{{ input.website }}" autocomplete="off" />
+                        {% if errors.website %}
+                            <span class="help-block">{{ errors.website | first }}</span>
+                        {% endif %}
+                    </div>
+                </fieldset>
                 <button type="submit" class="btn btn-primary">Create</button>
                 {{ csrf_token | raw }}
             </form>

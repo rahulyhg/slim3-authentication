@@ -64,8 +64,8 @@ class Settings extends Controller {
         ]);
         if ($validation->passed()) {
             $this->user()->update([
-                "forename" => $this->param("forename"),
                 "biography" => $this->param("biography"),
+                "forename" => $this->param("forename"),
                 "location" => $this->param("location"),
                 "surname" => $this->param("surname"),
                 "website" => $this->param("website")
